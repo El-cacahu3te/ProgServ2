@@ -13,6 +13,8 @@ Deux 'états' : connecté (C) et non connecté (NC)
 - C & NC : Homepage avec les jeux les plus populaires ("trending") du moment. Avec moyenne des notes.
 - C & NC : Système de tri (catégorie, notes, genre, studio, date de sortie, plateforme, age minimum)
 - NC : Page d'inscription (pseudo, mot de passe, date de naissance, mail, (genre))
+	- Avertissement si le pseudo et/ou le mail existe déjà
+	- Avertissement si le mot de passe n'est pas suffisemment fort
 - C & NC : Une page pour chaque jeu, avec catégorie, notes, commentaires, sortie, plateforme, age minimum...
 - C : Possibilité de mettre une note et/ou un commentaire.
 
@@ -22,7 +24,7 @@ Pages privées :
 - Ajouter un nouveau jeu
 	- mettre l'état, une note (optionnelle en cas de jeu non-commencé),
 - Paramètres du compte
-	- changement de mot de passe, pseudo, mail, bio, genre, réseaux sociaux...
+	- changement de mot de passe (avec vérification), pseudo, mail, bio, genre, réseaux sociaux...
 - Liste de souhaits
 - Bouton 'se déconnecter'
 
