@@ -1,6 +1,6 @@
 <?php
 
-namespace Users;
+namespace User;
 
 use DateTime;
 

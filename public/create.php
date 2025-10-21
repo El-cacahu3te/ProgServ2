@@ -1,5 +1,6 @@
 <?php
-require __DIR__ . '/../../src/utils/autoloader.php';
+
+require __DIR__ . '/../src/utils/autoloader.php';
 
 use User\UserManager;
 use User\User;
@@ -60,18 +61,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <link rel="stylesheet" href="../assets/css/custom.css">
-
-    <title>Créer un.e nouvel.le utilisateur.trice | MyApp</title>
+    <title>Créez votre compte</title>
 </head>
 
 <body>
     <main class="container">
-        <h1>Créer un.e nouvel.le utilisateur.trice</h1>
-
-        <p><a href="../index.php">Accueil</a> > <a href="index.php">Gestion des utilisateur.trices</a> > Création d'un.e utilisateur.trice</p>
+        <h1>Créez votre compte !</h1>
 
         <?php if ($_SERVER["REQUEST_METHOD"] === "POST") { ?>
             <?php if (empty($errors)) { ?>
@@ -87,17 +82,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php } ?>
 
         <form action="create.php" method="POST">
-            <label for="first-name">Prénom</label>
-            <input type="text" id="first-name" name="first-name" value="<?= htmlspecialchars($firstName ?? ''); ?>" required minlength="2">
+            <label for="username">Pseudonyme</label>
+            <input type="text" id="username" name="username" value="<?= htmlspecialchars($username ?? ''); ?>" required minlength="2">
 
-            <label for="last-name">Nom</label>
-            <input type="text" id="last-name" name="last-name" value="<?= htmlspecialchars($lastName ?? ''); ?>" required minlength="2">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" value="<?= htmlspecialchars($password ?? ''); ?>" required minlength="6">
 
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? ''); ?>" required>
 
-            <label for="age">Âge</label>
-            <input type="number" id="age" name="age" value="<?= htmlspecialchars($age ?? ''); ?>" required min="0">
+            <label for="birthdate">Date de naissance</label>
+            <input type="number" id="birthdate" birthdate="age" value="<?= htmlspecialchars($birthdate ?? ''); ?>" required min="0">
 
             <button type="submit">Créer</button>
         </form>
