@@ -7,6 +7,7 @@ use DateTime;
 interface GamesInterface {
     public function getId(): ?int;
     public function getName(): string;
+        public function getImageSlug(): ?string;
     public function getTypes(): array;
     public function getPlatforms(): array;
     public function getReleaseDate(): \DateTime;

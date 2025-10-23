@@ -53,11 +53,12 @@ class Database implements DatabaseInterface
         $sqlGames = "CREATE TABLE IF NOT EXISTS games (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
+            image_slug VARCHAR(100) NULL,
             types JSON NOT NULL,
             platforms JSON NOT NULL,
             release_date DATE NOT NULL,
             ratings JSON NULL,
-            averageRating DECIMAL(3,2) NULL,
+            average_rating DECIMAL(3,2) NULL,
             price DECIMAL(5,2) NOT NULL
         );";
 

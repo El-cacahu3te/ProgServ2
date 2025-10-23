@@ -29,6 +29,7 @@ class Game implements GamesInterface
 
     private ?int $id;
     private string $name;
+    private ?string $imageSlug;
     private array $types = [];
     private array $platforms = [];
     private \DateTime $releaseDate;
@@ -37,7 +38,7 @@ class Game implements GamesInterface
     private float $price;
     // private array $comments = [];
 
-    public function __construct(?int $id, string $name, array $types, array $platforms, \DateTime $releaseDate, float $price)
+    public function __construct(?int $id, string $name, ?string $imageSlug, array $types, array $platforms, \DateTime $releaseDate, float $price)
     {
         /*
         if (empty($name)) {
@@ -78,6 +79,11 @@ class Game implements GamesInterface
         return $this->id;
     }
 
+    public function getImageSlug(): ?string
+    {
+        return $this->imageSlug;
+    }
+
     public function getTypes(): array
     {
         return $this->types;
@@ -103,7 +109,7 @@ class Game implements GamesInterface
         return $this->averageRating;
     }
 
-        public function getPrice(): float
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -113,6 +119,11 @@ class Game implements GamesInterface
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function setImageSlug(?string $imageSlug): void
+    {
+        $this->imageSlug = $imageSlug;
     }
 
     public function setPlatforms(array $platforms): void

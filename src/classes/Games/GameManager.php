@@ -53,11 +53,12 @@ class GamesManager implements GamesManagerInterface
 
         // Lien avec les paramètres
         $stmt->bindValue(':name', $game->getName());
+        $stmt->bindValue(':image_slug', $game->getImageSlug());
         $stmt->bindValue(':types', json_encode($game->getTypes()));
         $stmt->bindValue(':platforms', json_encode($game->getPlatforms()));
-        $stmt->bindValue(':releaseDate', $game->getReleaseDate());
+        $stmt->bindValue(':release_date', $game->getReleaseDate());
         $stmt->bindValue(':ratings', json_encode($game->getRatings()));
-        $stmt->bindValue(':averageRating', $game->getAverageRating());
+        $stmt->bindValue(':average_rating', $game->getAverageRating());
         $stmt->bindValue(':price', $game->getPrice());
 
         // Exécution de la requête SQL pour ajouter un utilisateur
