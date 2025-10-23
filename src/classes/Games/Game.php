@@ -33,7 +33,7 @@ class Game implements GamesInterface
     private array $types = [];
     private array $platforms = [];
     private \DateTime $releaseDate;
-    private array $ratings;
+    private array $ratings = [];
     private ?float $averageRating = null;
     private float $price;
     // private array $comments = [];
