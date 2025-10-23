@@ -37,15 +37,23 @@ class GamesManager implements GamesManagerInterface
     {
         // Définition de la requête SQL pour ajouter un utilisateur
         $sql = "INSERT INTO games (
-            first_name,
-            last_name,
-            email,
-            age
+            name,
+            image_slug,
+            types,
+            platforms,
+            release_date,
+            ratings,
+            average_rating,
+            price
         ) VALUES (
-            :first_name,
-            :last_name,
-            :email,
-            :age
+            :name,
+            :image_slug,
+            :types,
+            :platforms,
+            :release_date,
+            :ratings,
+            :average_rating,
+            :price
         )";
 
         // Préparation de la requête SQL
