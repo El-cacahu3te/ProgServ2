@@ -12,16 +12,10 @@ class User implements UserInterface {
     private string $email;
     private \DateTime $birthdate;
     private ?string $biography;
-    private ?string $gender;
-    private ?array $socials = [
-        'steam' => 'url',
-        'twitch' => 'url',
-        'instagram' => 'url',
-        'facebook' => 'url',
-        'tiktok' => 'url',
-    ];
 
-    public function __construct(?int $id, string $username, ?string $password, string $email, \DateTime $birthdate, ?string $biography, ?string $gender, ?array $socials)
+
+
+    public function __construct(?int $id, string $username, ?string $password, string $email, \DateTime $birthdate, ?string $biography)
     {
         $this->id = $id;
         $this->username = $username;
@@ -29,8 +23,7 @@ class User implements UserInterface {
         $this->email = $email;
         $this->birthdate = $birthdate;
         $this->biography = $biography;
-        $this->gender = $gender;
-        $this->socials = $socials;
+    
     }
 
     //GETTERS
@@ -62,18 +55,9 @@ class User implements UserInterface {
 
     public function getBiography(): ?string
     {
-        return $this-biography;
+        return $this->biography;
     }
 
-    public function getGender(): ?string
-    {
-        return $this->gender;
-    }
-
-    public function getSocials(): ?array
-    {
-        return $this->socials;
-    }
 
     //SETTERS
 
@@ -87,7 +71,7 @@ class User implements UserInterface {
         $this->password = $password;
     }
 
-    public function setEmail(string $email): string
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
@@ -102,13 +86,4 @@ class User implements UserInterface {
         $this->biography = $biography;
     }
 
-    public function setGender(string $gender): void
-    {
-        $this->gender = $gender;
-    }
-
-    public function setSocials(array $socials): void
-    {
-        $this->socials = $socials;
-    }
 };

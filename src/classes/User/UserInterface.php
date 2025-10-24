@@ -11,6 +11,4 @@ interface UserInterface {
     public function getEmail(): string;
     public function getBirthDate(): \DateTime;
     public function getBiography(): ?string;
-    public function getGender(): ?string;
-    public function getSocials(): ?array;
 };
