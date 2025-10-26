@@ -38,22 +38,20 @@ class GamesManager implements GamesManagerInterface
         // Définition de la requête SQL pour ajouter un jeu
         $sql = "INSERT INTO games (
             name,
-            image_slug,
-            types,
-            platforms,
             release_date,
-            ratings,
-            average_rating,
-            price
+            game_min_age,
+            has_single_player,
+            has_multi_player,
+            has_coop,
+            has_pvp
         ) VALUES (
             :name,
-            :image_slug,
-            :types,
-            :platforms,
             :release_date,
-            :ratings,
-            :average_rating,
-            :price
+            :game_min_age,
+            :has_single_player,
+            :has_multi_player,
+            :has_coop,
+            :has_pvp
         )";
 
         // Préparation de la requête SQL
@@ -61,13 +59,13 @@ class GamesManager implements GamesManagerInterface
 
         // Lien avec les paramètres
         $stmt->bindValue(':name', $game->getName());
-        $stmt->bindValue(':image_slug', $game->getImageSlug());
-        $stmt->bindValue(':types', json_encode($game->getTypes()));
-        $stmt->bindValue(':platforms', json_encode($game->getPlatforms()));
+        //  $stmt->bindValue(':image_slug', $game->getImageSlug());
         $stmt->bindValue(':release_date', $game->getReleaseDate());
-        $stmt->bindValue(':ratings', json_encode($game->getRatings()));
-        $stmt->bindValue(':average_rating', $game->getAverageRating());
-        $stmt->bindValue(':price', $game->getPrice());
+        $stmt->bindValue(':game_min_age', $game->getMinAge());
+        $stmt->bindValue(':has_single_player', $game->getHasSinglePlayer());
+        $stmt->bindValue(':has_multi_player', $game->getHasMultiPlayer());
+        $stmt->bindValue(':has_coop', $game->getHasCoop());
+        $stmt->bindValue(':has_pvp', $game->getHasPvp());
 
         // Exécution de la requête SQL pour ajouter un jeu
         $stmt->execute();

@@ -6,6 +6,7 @@ use DateTime;
 
 class Game implements GamesInterface
 {
+    /*
     const TYPES = [
         'adventure' => 'Aventure',
         'shooter' => 'Jeu de tir',
@@ -26,45 +27,27 @@ class Game implements GamesInterface
         'pc' => 'PC'
         // A remplir
     ];
-
+*/
     private ?int $id;
     private string $name;
-    private ?string $imageSlug;
-    private array $types = [];
-    private array $platforms = [];
+    // private ?string $imageSlug;
     private \DateTime $releaseDate;
-    private array $ratings = [];
-    private ?float $averageRating = null;
-    private float $price;
-    // private array $comments = [];
+    private ?int $minAge;
+    private ?bool $hasSinglePlayer;
+    private ?bool $hasMultiPlayer;
+    private ?bool $hasCoop;
+    private ?bool $hasPvp;
 
-    public function __construct(?int $id, string $name, ?string $imageSlug, array $types, array $platforms, \DateTime $releaseDate, float $price)
+    public function __construct(?int $id, string $name, \DateTime $releaseDate, ?int $minAge, ?bool $hasSinglePlayer, ?bool $hasMultiPlayer, ?bool $hasCoop, ?bool $hasPvp)
     {
-        /*
-        if (empty($name)) {
-            throw new \InvalidArgumentException("Le nom est requis.");
-        } else if (strlen($name) < 2) {
-            throw new \InvalidArgumentException("Le nom doit contenir au moins 2 caractères.");
-        }
-
-        if (empty($types)) {
-            throw new \InvalidArgumentException("Le type est requis.");
-        }
-
-        if (empty($date)) {
-            throw new \InvalidArgumentException("Une date valide est requis.");
-        }
-
-        if ($price < 0) {
-            throw new \InvalidArgumentException("Le prix doit être un nombre positif.");
-        }
-            */
         $this->id = $id;
         $this->name = $name;
-        $this->types = $types;
-        $this->platforms = $platforms;
         $this->releaseDate = $releaseDate;
-        $this->price = $price;
+        $this->minAge = $minAge;
+        $this->hasSinglePlayer = $hasSinglePlayer;
+        $this->hasMultiPlayer = $hasMultiPlayer;
+        $this->hasCoop = $hasCoop;
+        $this->hasPvp = $hasPvp;
     }
 
     // GETTERS
@@ -78,40 +61,44 @@ class Game implements GamesInterface
     {
         return $this->id;
     }
-
+    /*
     public function getImageSlug(): ?string
     {
         return $this->imageSlug;
     }
+*/
 
-    public function getTypes(): array
-    {
-        return $this->types;
-    }
-
-    public function getPlatforms(): array
-    {
-        return $this->platforms;
-    }
-
-    public function getReleaseDate(): \DateTime
+    public function getReleaseDate(): DateTime
     {
         return $this->releaseDate;
     }
 
-    public function getRatings(): array
+    public function getMinAge(): ?int
     {
-        return $this->ratings;
+        return $this->minAge;
     }
 
-    public function getAverageRating(): ?float
+    public function getHasSinglePlayer(): ?bool
     {
-        return $this->averageRating;
+        return $this->hasSinglePlayer;
     }
 
-    public function getPrice(): float
+
+    public function getHasMultiPlayer(): ?bool
     {
-        return $this->price;
+        return $this->hasMultiPlayer;
+    }
+
+
+    public function getHasCoop(): ?bool
+    {
+        return $this->hasCoop;
+    }
+
+
+    public function getHasPvp(): ?bool
+    {
+        return $this->hasPvp;
     }
 
     // SETTERS
@@ -121,45 +108,38 @@ class Game implements GamesInterface
         $this->name = $name;
     }
 
+    public function setMinAge(?int $minAge): void
+    {
+        $this->minAge = $minAge;
+    }
+
+    public function setHasSinglePlayer(?bool $hasSinglePlayer): void
+    {
+        $this->hasSinglePlayer = $hasSinglePlayer;
+    }
+
+
+    public function setHasMultiPlayer(?bool $hasMultiPlayer): void
+    {
+        $this->hasMultiPlayer = $hasMultiPlayer;
+    }
+
+
+    public function setHasCoop(?bool $hasCoop): void
+    {
+        $this->hasCoop = $hasCoop;
+    }
+
+
+    public function setHasPvp(?bool $hasPvp): void
+    {
+        $this->hasPvp = $hasPvp;
+    }
+
+    /*
     public function setImageSlug(?string $imageSlug): void
     {
         $this->imageSlug = $imageSlug;
     }
-
-    public function setPlatforms(array $platforms): void
-    {
-        $this->platforms = $platforms;
-    }
-
-    public function setTypes(array $types): void
-    {
-        $this->types = $types;
-    }
-
-    public function setReleaseDate(\DateTime $releaseDate): void
-    {
-        $this->releaseDate = $releaseDate;
-    }
-
-    public function setPrice(float $price): void
-    {
-        $this->price = $price;
-    }
-
-    public function setAverageRating(): void
-    {
-        $ratings = $this->getRatings();
-
-        if (empty($ratings)) {
-            $this->averageRating = null;
-        } else {
-            $this->averageRating = array_sum($ratings) / count($ratings);
-        }
-    }
-
-    // AUTRES
-    public function addRatings(int $rating): void
-    {
-        $this->ratings[] = $rating;
-    }
+*/
 };

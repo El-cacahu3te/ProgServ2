@@ -4,15 +4,14 @@ namespace Games;
 
 use DateTime;
 
-interface GamesInterface {
+interface GamesInterface
+{
     public function getId(): ?int;
     public function getName(): string;
-        public function getImageSlug(): ?string;
-    public function getTypes(): array;
-    public function getPlatforms(): array;
+    //  public function getImageSlug(): ?string;
     public function getReleaseDate(): \DateTime;
-    public function getRatings(): array;
-    public function getAverageRating(): ?float;
-    public function getPrice(): float;
+    public function getHasSinglePlayer(): ?bool;
+    public function getHasMultiPlayer(): ?bool;
+    public function getHasCoop(): ?bool;
+    public function getHasPvp(): ?bool;
 }
-
