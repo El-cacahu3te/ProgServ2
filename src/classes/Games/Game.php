@@ -59,7 +59,7 @@ class Game implements GamesInterface
 
     public function getName(): string
     {
-        return $this->id;
+        return $this->name;
     }
     /*
     public function getImageSlug(): ?string
