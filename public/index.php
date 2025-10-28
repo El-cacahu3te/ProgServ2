@@ -56,10 +56,9 @@ $games = $stmt->fetchAll();
         <table>
             <thead>
                 <tr>
-                    <th>Prénom</th>
-                    <th>Nom</th>
-                    <th>Email</th>
-                    <th>Âge</th>
+                    <th>Nom du jeu</th>
+                    <th>Date de sortie</th>
+                    <th>Age minimum</th>
                 </tr>
             </thead>
             <tbody>
