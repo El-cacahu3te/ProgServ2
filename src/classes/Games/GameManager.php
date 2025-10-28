@@ -15,7 +15,7 @@ class GamesManager implements GamesManagerInterface
         $this->database = new Database();
     }
 
-    public function getgames(): array
+    public function getGames(): array
     {
         // Définition de la requête SQL pour récupérer tous les jeux
         $sql = "SELECT * FROM games";
@@ -91,4 +91,15 @@ class GamesManager implements GamesManagerInterface
         // Exécution de la requête SQL pour supprimer un jeu
         return $stmt->execute();
     }
+/*
+    public function linkGameToStudio(Game $game, Studio $studio): void
+    {
+        $sql = "INSERT INTO game_studios (gameId, studioId) VALUES (:game_id, :studio_id)";
+
+        $stmt = $this->database->getPdo()->prepare($sql);
+
+        $stmt->bindValue(':game_id', $game->getId());
+        $stmt->bindValue(':studio_id', $studio->getId());
+    }
+        */
 };
