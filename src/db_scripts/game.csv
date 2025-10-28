@@ -1,0 +1,99 @@
+name,release_date,game_min_age,has_single_player,has_multiplayer,has_coop,has_pvp
+The Witcher 3: Wild Hunt,2015-05-19,18,1,0,0,0
+Minecraft,2011-11-18,7,1,1,1,1
+Grand Theft Auto V,2013-09-17,18,1,1,1,1
+The Legend of Zelda: Breath of the Wild,2017-03-03,12,1,0,0,0
+Red Dead Redemption 2,2018-10-26,18,1,1,1,0
+Cyberpunk 2077,2020-12-10,18,1,1,0,0
+Elden Ring,2022-02-25,16,1,1,1,1
+God of War,2018-04-20,18,1,0,0,0
+The Last of Us Part II,2020-06-19,18,1,1,1,0
+Horizon Zero Dawn,2017-02-28,16,1,0,0,0
+Dark Souls III,2016-04-12,16,1,1,1,1
+Sekiro: Shadows Die Twice,2019-03-22,16,1,0,0,0
+Bloodborne,2015-03-24,16,1,1,1,0
+Resident Evil Village,2021-05-07,18,1,0,0,0
+Skyrim,2011-11-11,16,1,0,0,0
+Fallout 4,2015-11-10,18,1,0,0,0
+Assassin's Creed Valhalla,2020-11-10,18,1,1,1,0
+Call of Duty: Modern Warfare,2019-10-25,18,1,1,1,1
+Battlefield 2042,2021-11-19,16,0,1,1,1
+Fortnite,2017-07-25,12,0,1,1,1
+Apex Legends,2019-02-04,16,0,1,1,1
+Overwatch 2,2022-10-04,12,0,1,1,1
+Rainbow Six Siege,2015-12-01,16,0,1,1,1
+Counter-Strike 2,2023-09-27,16,0,1,0,1
+Valorant,2020-06-02,16,0,1,0,1
+League of Legends,2009-10-27,12,0,1,0,1
+Dota 2,2013-07-09,12,0,1,0,1
+World of Warcraft,2004-11-23,12,1,1,1,1
+Final Fantasy XIV,2013-08-27,12,1,1,1,1
+Destiny 2,2017-09-06,16,1,1,1,1
+Monster Hunter: World,2018-01-26,16,1,1,1,0
+Diablo IV,2023-06-06,18,1,1,1,1
+Path of Exile,2013-10-23,16,1,1,1,1
+Stardew Valley,2016-02-26,7,1,1,1,0
+Terraria,2011-05-16,12,1,1,1,1
+Hollow Knight,2017-02-24,7,1,0,0,0
+Celeste,2018-01-25,7,1,0,0,0
+Hades,2020-09-17,12,1,0,0,0
+Dead Cells,2018-08-07,16,1,0,0,0
+Returnal,2021-04-30,16,1,0,0,0
+Control,2019-08-27,16,1,0,0,0
+Death Stranding,2019-11-08,18,1,1,1,0
+Ghost of Tsushima,2020-07-17,18,1,1,1,0
+Spider-Man,2018-09-07,16,1,0,0,0
+Uncharted 4,2016-05-10,16,1,1,1,1
+Ratchet & Clank: Rift Apart,2021-06-11,7,1,0,0,0
+Demon's Souls,2020-11-12,16,1,1,1,0
+Nioh 2,2020-03-13,18,1,1,1,0
+Persona 5 Royal,2019-10-31,16,1,0,0,0
+Dragon Quest XI,2017-07-29,12,1,0,0,0
+Tales of Arise,2021-09-10,16,1,0,0,0
+Ni no Kuni II,2018-03-23,12,1,0,0,0
+Genshin Impact,2020-09-28,12,1,1,1,0
+Honkai: Star Rail,2023-04-26,12,1,0,0,0
+Baldur's Gate 3,2023-08-03,18,1,1,1,0
+Divinity: Original Sin 2,2017-09-14,16,1,1,1,0
+Pillars of Eternity II,2018-05-08,16,1,0,0,0
+Wasteland 3,2020-08-28,18,1,1,1,0
+XCOM 2,2016-02-05,16,1,0,0,0
+Civilization VI,2016-10-21,12,1,1,0,1
+Total War: Warhammer III,2022-02-17,16,1,1,1,1
+Age of Empires IV,2021-10-28,12,1,1,1,1
+StarCraft II,2010-07-27,12,1,1,1,1
+Warcraft III: Reforged,2020-01-28,12,1,1,1,1
+Anno 1800,2019-04-16,7,1,1,1,0
+Cities: Skylines,2015-03-10,7,1,0,0,0
+Planet Zoo,2019-11-05,7,1,0,0,0
+The Sims 4,2014-09-02,12,1,0,0,0
+Animal Crossing: New Horizons,2020-03-20,3,1,1,1,0
+Mario Kart 8 Deluxe,2017-04-28,3,1,1,1,1
+Super Smash Bros. Ultimate,2018-12-07,12,1,1,1,1
+Splatoon 3,2022-09-09,7,1,1,1,1
+Pokémon Scarlet,2022-11-18,7,1,1,1,1
+Metroid Dread,2021-10-08,12,1,0,0,0
+Fire Emblem: Three Houses,2019-07-26,12,1,0,0,0
+Xenoblade Chronicles 3,2022-07-29,12,1,0,0,0
+Kirby and the Forgotten Land,2022-03-25,7,1,1,1,0
+Sonic Frontiers,2022-11-08,7,1,0,0,0
+It Takes Two,2021-03-26,12,0,1,1,0
+A Way Out,2018-03-23,18,0,1,1,0
+Cuphead,2017-09-29,7,1,1,1,0
+Ori and the Will of the Wisps,2020-03-11,7,1,0,0,0
+Ori and the Blind Forest,2015-03-11,7,1,0,0,0
+Rocket League,2015-07-07,3,1,1,1,1
+Fall Guys,2020-08-04,7,0,1,1,0
+Among Us,2018-06-15,7,0,1,1,0
+Phasmophobia,2020-09-18,12,1,1,1,0
+Lethal Company,2023-10-23,16,0,1,1,0
+Sea of Thieves,2018-03-20,12,0,1,1,1
+No Man's Sky,2016-08-09,7,1,1,1,0
+Subnautica,2018-01-23,7,1,0,0,0
+The Forest,2018-04-30,18,1,1,1,0
+Rust,2018-02-08,16,0,1,0,1
+ARK: Survival Evolved,2017-08-29,16,1,1,1,1
+Valheim,2021-02-02,12,1,1,1,1
+Satisfactory,2020-06-08,7,1,1,1,0
+Factorio,2020-08-14,7,1,1,1,0
+Rimworld,2018-10-17,16,1,0,0,0
