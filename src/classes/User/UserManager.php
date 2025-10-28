@@ -1,7 +1,7 @@
 <?php
 
 namespace User;
-// use Database;
+use Database;
 
 class UserManager implements UserManagerInterface
 {
