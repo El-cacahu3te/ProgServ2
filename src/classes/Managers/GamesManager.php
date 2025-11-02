@@ -1,6 +1,8 @@
 <?php
 
-namespace Games;
+namespace Managers;
+
+use Games\Game;
 
 require_once __DIR__ . '/../../utils/autoloader.php';
 
@@ -31,6 +33,34 @@ class GamesManager implements GamesManagerInterface
 
         // Retour de tous les jeux
         return $games;
+    }
+
+    public function getGamesWithStudio(): array
+    {
+        $sql = "SELECT 
+        games.name AS game_name,
+        games.release_date AS release_date,
+        games.game_min_age AS game_min_age,
+        games.has_single_player AS has_single_player,
+        games.has_multiplayer AS has_multiplayer,
+        games.has_coop AS has_coop,
+        games.has_pvp AS has_pvp,
+        studios.name AS studio_name
+        FROM games
+        INNER JOIN game_studios ON games.id = game_studios.game_id
+        INNER JOIN studios ON game_studios.studios_id = studios.id;";
+
+        // Préparation de la requête SQL
+        $stmt = $this->database->getPdo()->prepare($sql);
+
+        // Exécution de la requête SQL
+        $stmt->execute();
+
+        // Récupération de tous les jeux
+        $gamesWithStudio = $stmt->fetchAll();
+
+        // Retour de tous les jeux
+        return $gamesWithStudio;
     }
 
     public function addGame(Game $game): int
@@ -91,7 +121,7 @@ class GamesManager implements GamesManagerInterface
         // Exécution de la requête SQL pour supprimer un jeu
         return $stmt->execute();
     }
-/*
+    /*
     public function linkGameToStudio(Game $game, Studio $studio): void
     {
         $sql = "INSERT INTO game_studios (gameId, studioId) VALUES (:game_id, :studio_id)";
