@@ -7,10 +7,16 @@ return [
     'release_date' => 'Release date',
     'game_min_age' => 'Minimum age',
     'studio_name' => 'Studio name',
+    'username' => 'Username',
+    'password' => 'Password',
+    'login' => 'Login',
+    'create_account' => 'Create account',
+    'back_to_home_screen' => 'Go back to home screen',
+    'no_account_yet' => 'No account yet?',
     'languages' => [
         'en' => 'English',
         'fr' => 'French (Français)',
-        'it' => 'Italian (Italiano)',
     ],
+    'error' => 'Error',
     'submit' => 'Change language',
 ];
