@@ -5,7 +5,8 @@ return [
     'choose_language' => 'Choose your preferred language:',
     'game_name' => 'Game name',
     'release_date' => 'Release date',
-    'minimum_age' => 'Minimum age',
+    'game_min_age' => 'Minimum age',
+    'studio_name' => 'Studio name',
     'languages' => [
         'en' => 'English',
         'fr' => 'French (Français)',

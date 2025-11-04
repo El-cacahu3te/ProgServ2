@@ -1,4 +1,9 @@
 <?php
+
+use Managers\GamesManager;
+
+require_once __DIR__ . '/../src/classes/Managers/GamesManager.php';
+
 const DATABASE_CONFIGURATION_FILE = __DIR__ . '/../src/config/database.ini';
 require_once __DIR__ . '/../src/i18n/load-translation.php';
 
@@ -43,6 +48,12 @@ $password = $config['password'];
 //   - https://www.php.net/manual/fr/ref.pdo-mysql.connection.php
 $pdo = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $username, $password);
 
+
+$gamesManager = new GamesManager($pdo);
+
+$gamesWithStudio = $gamesManager->getGamesWithStudio();
+
+/*
 // Sélection de la base de données
 $sql = "USE `$database`;";
 $stmt = $pdo->prepare($sql);
@@ -60,6 +71,7 @@ $stmt->execute();
 
 // Récupération de tous les utilisateurs
 $games = $stmt->fetchAll();
+*/
 ?>
 
 <!DOCTYPE html>
@@ -92,15 +104,17 @@ $games = $stmt->fetchAll();
                 <tr>
                     <th><?= htmlspecialchars($traductions['game_name'])?></th>
                     <th><?= htmlspecialchars($traductions['release_date'])?></th>
-                    <th><?= htmlspecialchars($traductions['minimum_age'])?></th>
+                    <th><?= htmlspecialchars($traductions['game_min_age'])?></th>
+                    <th><?= htmlspecialchars($traductions['studio_name'])?></th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($games as $game) { ?>
+                <?php foreach ($gamesWithStudio as $game) { ?>
                     <tr>
-                        <td><?= htmlspecialchars($game['name']) ?></td>
+                        <td><?= htmlspecialchars($game['game_name']) ?></td>
                         <td><?= htmlspecialchars($game['release_date']) ?></td>
                         <td><?= htmlspecialchars($game['game_min_age']) ?></td>
+                        <td><?= htmlspecialchars($game['studio_name']) ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
