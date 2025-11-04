@@ -1,30 +1,33 @@
 <?php
 
-namespace User;
+namespace Users;
 
 use DateTime;
 
-class User implements UserInterface {
+class User implements UserInterface
+{
 
     private ?int $id;
     private string $username;
     private string $password;
     private string $email;
+    private string $role;
     private \DateTime $birthdate;
-    private ?string $bio;
+    private ?string $biography;
     private \DateTime $created_at; 
 
 
 
-    public function __construct(?int $id, string $username, ?string $password, string $email, \DateTime $birthdate, ?string $bio)
-    {
+    public function __construct(?int $id, string $username, ?string $password, string $email, \DateTime $birthdate, ?string $biography)
+   {
         $this->id = $id;
         $this->username = $username;
-        $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
         $this->email = $email;
+        $this->role = $role;
         $this->birthdate = $birthdate;
-        $this->bio = $bio;
-    
+        $this->biography = $biography;
+      
     }
 
     //GETTERS
@@ -49,6 +52,11 @@ class User implements UserInterface {
         return $this->email;
     }
 
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
     public function getBirthDate(): \DateTime
     {
         return $this->birthdate;
@@ -56,12 +64,17 @@ class User implements UserInterface {
 
     public function getBiography(): ?string
     {
-        return $this->bio;
+        return $this->biography;
     }
 
     public function getCreated_at(): \DateTime
     {
         return $this->created_at; 
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->created_at;
     }
 
 
@@ -74,12 +87,17 @@ class User implements UserInterface {
 
     public function setPassword(string $password): void
     {
-        $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
 
     public function setEmail(string $email): void
     {
         $this->email = $email;
+    }
+
+    public function setRole(string $role): void
+    {
+        $this->role = $role;
     }
 
     public function setBirthDate(\DateTime $birthdate): void
@@ -89,7 +107,7 @@ class User implements UserInterface {
 
     public function setBiography(string $biography): void
     {
-        $this->bio= $biography;
+        $this->biography= $biography;
     }
 
 };
