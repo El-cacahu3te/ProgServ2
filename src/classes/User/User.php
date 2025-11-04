@@ -11,18 +11,19 @@ class User implements UserInterface {
     private string $password;
     private string $email;
     private \DateTime $birthdate;
-    private ?string $biography;
+    private ?string $bio;
+    private \DateTime $created_at; 
 
 
 
-    public function __construct(?int $id, string $username, ?string $password, string $email, \DateTime $birthdate, ?string $biography)
+    public function __construct(?int $id, string $username, ?string $password, string $email, \DateTime $birthdate, ?string $bio)
     {
         $this->id = $id;
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
         $this->birthdate = $birthdate;
-        $this->biography = $biography;
+        $this->bio = $bio;
     
     }
 
@@ -55,7 +56,12 @@ class User implements UserInterface {
 
     public function getBiography(): ?string
     {
-        return $this->biography;
+        return $this->bio;
+    }
+
+    public function getCreated_at(): \DateTime
+    {
+        return $this->created_at; 
     }
 
 
@@ -83,7 +89,7 @@ class User implements UserInterface {
 
     public function setBiography(string $biography): void
     {
-        $this->biography = $biography;
+        $this->bio= $biography;
     }
 
 };

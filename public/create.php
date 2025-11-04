@@ -15,8 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST["password"];
     $email = $_POST["email"];
     $birthdate = $_POST["birthdate"];
-
-    $errors = [];
+    $bio = $_POST["biographie"]; 
+}
 
     try {
         // Création d'un nouvel objet `User`
@@ -25,11 +25,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $username,
             $password,
             $email,
-            $birthdate
+            $birthdate,
+            $bio //la date de création sera assigné automatiquement 
         );
     } catch (InvalidArgumentException $e) {
         $errors[] = $e->getMessage();
     }
+
 
     // S'il n'y a pas d'erreurs, ajout de l'utilisateur
     if (empty($errors)) {
@@ -52,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $errors[] = "Erreur inattendue : " . $e->getMessage();
         }
     }
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -93,6 +95,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <label for="birthdate">Date de naissance</label>
             <input type="number" id="birthdate" birthdate="age" value="<?= htmlspecialchars($birthdate ?? ''); ?>" required min="0">
+
+            <label for="biographie">Biographie</label>
+            <input type="text" id="biographie" value="<?= htmlspecialchars($bio ?? ''); ?>" required maxlength="300">
+
 
             <button type="submit">Créer</button>
         </form>
