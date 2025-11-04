@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../src/utils/autoloader.php';
 
-use User\UserManager;
+use Managers\UserManager;
 use User\User;
 
 // Création d'une instance de UserManager
