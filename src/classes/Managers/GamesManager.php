@@ -5,8 +5,9 @@ namespace Managers;
 use Games\Game;
 
 require_once __DIR__ . '/../../utils/autoloader.php';
-
+use PDO; 
 use Database;
+use PDOException;
 
 class GamesManager implements GamesManagerInterface
 {
@@ -63,7 +64,8 @@ class GamesManager implements GamesManagerInterface
         return $gamesWithStudio;
     }
 
-    public function addGame(Game $game): int
+    public function addGame(Game $game): ?int {
+        try
     {
         // Définition de la requête SQL pour ajouter un jeu
         $sql = "INSERT INTO games (
@@ -88,14 +90,14 @@ class GamesManager implements GamesManagerInterface
         $stmt = $this->database->getPdo()->prepare($sql);
 
         // Lien avec les paramètres
-        $stmt->bindValue(':name', $game->getName());
+        $stmt->bindValue(':name', $game->getName(), PDO::PARAM_STR);
         //  $stmt->bindValue(':image_slug', $game->getImageSlug());
-        $stmt->bindValue(':release_date', $game->getReleaseDate());
-        $stmt->bindValue(':game_min_age', $game->getMinAge());
-        $stmt->bindValue(':has_single_player', $game->getHasSinglePlayer());
-        $stmt->bindValue(':has_multi_player', $game->getHasMultiPlayer());
-        $stmt->bindValue(':has_coop', $game->getHasCoop());
-        $stmt->bindValue(':has_pvp', $game->getHasPvp());
+        $stmt->bindValue(':release_date', $game->getReleaseDate(), PDO::PARAM_STR);
+        $stmt->bindValue(':game_min_age', $game->getMinAge(), PDO::PARAM_INT);
+        $stmt->bindValue(':has_single_player', $game->getHasSinglePlayer(), PDO::PARAM_BOOL);
+        $stmt->bindValue(':has_multi_player', $game->getHasMultiPlayer(), PDO::PARAM_BOOL);
+        $stmt->bindValue(':has_coop', $game->getHasCoop(), PDO::PARAM_BOOL);
+        $stmt->bindValue(':has_pvp', $game->getHasPvp(), PDO::PARAM_BOOL);
 
         // Exécution de la requête SQL pour ajouter un jeu
         $stmt->execute();
@@ -105,7 +107,11 @@ class GamesManager implements GamesManagerInterface
 
         // Retour de l'identifiant du jeu ajouté.
         return $gameId;
+    } catch (PDOException $e){
+         error_log("Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage());
+        return null;
     }
+}
 
     public function removeGame(int $id): bool
     {
