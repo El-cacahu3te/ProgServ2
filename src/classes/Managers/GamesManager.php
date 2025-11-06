@@ -38,6 +38,7 @@ class GamesManager implements GamesManagerInterface
     public function getGamesWithStudio(): array
     {
         $sql = "SELECT 
+        games.id AS game_id,
         games.name AS game_name,
         games.release_date AS release_date,
         games.game_min_age AS game_min_age,
@@ -61,6 +62,44 @@ class GamesManager implements GamesManagerInterface
 
         // Retour de tous les jeux
         return $gamesWithStudio;
+    }
+
+    public function getGameWithEverything(int $id): ?array
+    {
+        $sql = "SELECT
+        games.id AS game_id,
+        games.name AS game_name,
+        games.release_date AS release_date,
+        games.game_min_age AS game_min_age,
+        games.has_single_player AS has_single_player,
+        games.has_multiplayer AS has_multiplayer,
+        games.has_coop AS has_coop,
+        games.has_pvp AS has_pvp,
+        studios.name AS studio_name,
+        categories.name AS category_name,
+        platforms.name AS platform_name
+        
+        FROM games
+        INNER JOIN game_studios ON games.id = game_studios.game_id
+        INNER JOIN studios ON game_studios.studios_id = studios.id
+        INNER JOIN game_categories ON games.id = game_categories.game_id
+        INNER JOIN categories ON game_categories.category_id = categories.id
+        INNER JOIN game_platforms ON games.id = game_platforms.game_id
+        INNER JOIN platforms ON game_platforms.platform_id = platforms.id
+
+        WHERE games.id = :id;";
+
+        // Préparation de la requête SQL
+        $stmt = $this->database->getPdo()->prepare($sql);
+
+        // Exécution de la requête SQL
+        $stmt->execute(['id' => $id]);
+
+        // Récupération de tous les jeux
+        $gameWithEverything = $stmt->fetch();
+ 
+        // Retour de tous les jeux
+        return $gameWithEverything;
     }
 
     public function addGame(Game $game): int

@@ -7,6 +7,7 @@ return [
     'release_date' => 'Release date',
     'game_min_age' => 'Minimum age',
     'studio_name' => 'Studio name',
+    'view' => 'View Game',
     'languages' => [
         'en' => 'English',
         'fr' => 'French (Français)',
