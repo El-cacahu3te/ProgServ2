@@ -7,6 +7,7 @@ return [
     'release_date' => 'Release date',
     'game_min_age' => 'Minimum age',
     'studio_name' => 'Studio name',
+    'view' => 'View Game',
     'username' => 'Username',
     'password' => 'Password',
     'login' => 'Login',

@@ -48,7 +48,6 @@ $password = $config['password'];
 //   - https://www.php.net/manual/fr/ref.pdo-mysql.connection.php
 $pdo = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $username, $password);
 
-
 $gamesManager = new GamesManager($pdo);
 
 $gamesWithStudio = $gamesManager->getGamesWithStudio();
@@ -108,6 +107,7 @@ $games = $stmt->fetchAll();
                     <th><?= htmlspecialchars($traductions['release_date'])?></th>
                     <th><?= htmlspecialchars($traductions['game_min_age'])?></th>
                     <th><?= htmlspecialchars($traductions['studio_name'])?></th>
+                    <th><?= htmlspecialchars($traductions['view'])?></th>
                 </tr>
             </thead>
             <tbody>
@@ -117,6 +117,7 @@ $games = $stmt->fetchAll();
                         <td><?= htmlspecialchars($game['release_date']) ?></td>
                         <td><?= htmlspecialchars($game['game_min_age']) ?></td>
                         <td><?= htmlspecialchars($game['studio_name']) ?></td>
+                        <td><a href="view.php?id=<?=$game['game_id']?>">x</a></td>
                     </tr>
                 <?php } ?>
             </tbody>
