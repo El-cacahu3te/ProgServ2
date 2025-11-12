@@ -5,7 +5,7 @@ namespace Managers;
 use Games\Game;
 
 require_once __DIR__ . '/../../utils/autoloader.php';
-use PDO; 
+use PDO;
 use Database;
 use PDOException;
 
@@ -98,20 +98,21 @@ class GamesManager implements GamesManagerInterface
 
         // Récupération de tous les jeux
         $gameWithEverything = $stmt->fetch();
- 
+
         // Retour de tous les jeux
         return $gameWithEverything;
     }
 
-    public function addGame(Game $game): int
+    public function addGame(Game $game): ?int
     {
-        // Définition de la requête SQL pour ajouter un jeu
-        $sql = "INSERT INTO games (
+        try {
+            // Définition de la requête SQL pour ajouter un jeu
+            $sql = "INSERT INTO games (
             name,
             release_date,
             game_min_age,
             has_single_player,
-            has_multi_player,
+            has_multiplayer,
             has_coop,
             has_pvp
         ) VALUES (
@@ -119,37 +120,37 @@ class GamesManager implements GamesManagerInterface
             :release_date,
             :game_min_age,
             :has_single_player,
-            :has_multi_player,
+            :has_multiplayer,
             :has_coop,
             :has_pvp
         )";
 
-        // Préparation de la requête SQL
-        $stmt = $this->database->getPdo()->prepare($sql);
+            // Préparation de la requête SQL
+            $stmt = $this->database->getPdo()->prepare($sql);
 
-        // Lien avec les paramètres
-        $stmt->bindValue(':name', $game->getName(), PDO::PARAM_STR);
-        //  $stmt->bindValue(':image_slug', $game->getImageSlug());
-        $stmt->bindValue(':release_date', $game->getReleaseDate(), PDO::PARAM_STR);
-        $stmt->bindValue(':game_min_age', $game->getMinAge(), PDO::PARAM_INT);
-        $stmt->bindValue(':has_single_player', $game->getHasSinglePlayer(), PDO::PARAM_BOOL);
-        $stmt->bindValue(':has_multi_player', $game->getHasMultiPlayer(), PDO::PARAM_BOOL);
-        $stmt->bindValue(':has_coop', $game->getHasCoop(), PDO::PARAM_BOOL);
-        $stmt->bindValue(':has_pvp', $game->getHasPvp(), PDO::PARAM_BOOL);
+            // Lien avec les paramètres
+            $stmt->bindValue(':name', $game->getName(), PDO::PARAM_STR);
+            //  $stmt->bindValue(':image_slug', $game->getImageSlug());
+            $stmt->bindValue(':release_date', $game->getReleaseDate(), PDO::PARAM_STR);
+            $stmt->bindValue(':game_min_age', $game->getMinAge(), PDO::PARAM_INT);
+            $stmt->bindValue(':has_single_player', $game->getHasSinglePlayer(), PDO::PARAM_BOOL);
+            $stmt->bindValue(':has_multiplayer', $game->getHasMultiPlayer(), PDO::PARAM_BOOL);
+            $stmt->bindValue(':has_coop', $game->getHasCoop(), PDO::PARAM_BOOL);
+            $stmt->bindValue(':has_pvp', $game->getHasPvp(), PDO::PARAM_BOOL);
 
-        // Exécution de la requête SQL pour ajouter un jeu
-        $stmt->execute();
+            // Exécution de la requête SQL pour ajouter un jeu
+            $stmt->execute();
 
-        // Récupération de l'identifiant de le jeu ajouté
-        $gameId = $this->database->getPdo()->lastInsertId();
+            // Récupération de l'identifiant de le jeu ajouté
+            $gameId = $this->database->getPdo()->lastInsertId();
 
-        // Retour de l'identifiant du jeu ajouté.
-        return $gameId;
-    } catch (PDOException $e){
-         error_log("Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage());
-        return null;
+            // Retour de l'identifiant du jeu ajouté.
+            return $gameId;
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'ajout du jeu : " . $e->getMessage());
+            return null;
+        }
     }
-}
 
     public function removeGame(int $id): bool
     {
@@ -176,4 +177,5 @@ class GamesManager implements GamesManagerInterface
         $stmt->bindValue(':studio_id', $studio->getId());
     }
         */
-};
+}
+;

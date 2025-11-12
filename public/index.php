@@ -48,7 +48,6 @@ $password = $config['password'];
 //   - https://www.php.net/manual/fr/ref.pdo-mysql.connection.php
 $pdo = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $username, $password);
 
-
 $gamesManager = new GamesManager($pdo);
 
 $gamesWithStudio = $gamesManager->getGamesWithStudio();
