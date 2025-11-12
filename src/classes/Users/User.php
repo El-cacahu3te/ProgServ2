@@ -14,11 +14,12 @@ class User implements UserInterface
     private string $role;
     private \DateTime $birthdate;
     private ?string $biography;
-    private \DateTime $createdAt;
+    private \DateTime $created_at; 
 
 
-    public function __construct(?int $id, string $username, string $password, string $email, string $role, \DateTime $birthdate, ?string $biography)
-    {
+
+    public function __construct(?int $id, string $username, ?string $password, string $email, \DateTime $birthdate, ?string $biography)
+   {
         $this->id = $id;
         $this->username = $username;
         $this->password = password_hash($password, PASSWORD_DEFAULT);
@@ -26,7 +27,7 @@ class User implements UserInterface
         $this->role = $role;
         $this->birthdate = $birthdate;
         $this->biography = $biography;
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+      
     }
 
     //GETTERS
@@ -66,10 +67,16 @@ class User implements UserInterface
         return $this->biography;
     }
 
+    public function getCreated_at(): \DateTime
+    {
+        return $this->created_at; 
+    }
+
     public function getCreatedAt(): \DateTime
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
+
 
     //SETTERS
 
@@ -100,11 +107,7 @@ class User implements UserInterface
 
     public function setBiography(string $biography): void
     {
-        $this->biography = $biography;
+        $this->biography= $biography;
     }
 
-    public function setCreatedAt(): void
-    {
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('Europe/Paris'));;
-    }
 };

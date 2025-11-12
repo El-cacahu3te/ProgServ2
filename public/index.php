@@ -87,8 +87,10 @@ $games = $stmt->fetchAll();
 
 <body>
     <main class="container">
-        <h1><?= htmlspecialchars($traductions['title']) ?></h1>
-        <p><?= htmlspecialchars($traductions['welcome']) ?></p>
+        <form class = "login" action = login.php>
+            <button type="submit"><?= htmlspecialchars($traductions['login']) ?></button>
+        </form>
+        <h1><?= htmlspecialchars($traductions['welcome']) ?></h1>
 
         <form method="post" action="index.php">
         <label for="language"><?= htmlspecialchars($traductions['choose_language']) ?></label>

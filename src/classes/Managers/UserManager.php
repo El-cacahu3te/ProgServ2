@@ -7,6 +7,8 @@ use Users\User;
 require_once __DIR__ . '/../../utils/autoloader.php';
 
 use Database;
+use PDO;
+use PDOException;
 
 class UserManager implements UserManagerInterface
 {
@@ -34,8 +36,8 @@ class UserManager implements UserManagerInterface
         // Retour de tous les users
         return $users;
     }
-    public function addUser(User $user): int
-    {
+    public function addUser(User $user): ?int {
+    try {
         // Définition de la requête SQL pour ajouter un jeu
         $sql = "INSERT INTO users(
             username,
@@ -44,29 +46,26 @@ class UserManager implements UserManagerInterface
             role,
             birthdate,
             biography,
-            createdAt
+            
         ) VALUES (
             :username,
-            :release_date,
-            :game_min_age,
-            :has_single_player,
-            :has_multi_player,
-            :has_coop,
-            :has_pvp
+            :password,
+            :email,
+            :role,
+            :birthdate,
+            :biography
         )";
 
         // Préparation de la requête SQL
         $stmt = $this->database->getPdo()->prepare($sql);
 
         // Lien avec les paramètres
-        $stmt->bindValue(':username', $user->getUsername());
-        $stmt->bindValue(':password', $user->getPassword());
-        $stmt->bindValue(':email', $user->getEmail());
-        $stmt->bindValue(':role', $user->getRole());
-        $stmt->bindValue(':birthdate', $user->getBirthdate());
-        $stmt->bindValue(':createdAt', $user->getCreatedAt());
-
-
+        $stmt->bindValue(':username', $user->getUsername(), PDO::PARAM_STR);
+        $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
+        $stmt->bindValue(':email', $user->getEmail(),PDO::PARAM_STR);
+        $stmt->bindValue(':role', $user->getRole(),PDO::PARAM_STR);
+        $stmt->bindValue(':birthdate', $user->getBirthdate(),PDO::PARAM_STR);
+        
         // Exécution de la requête SQL pour ajouter un user
         $stmt->execute();
 
@@ -74,8 +73,12 @@ class UserManager implements UserManagerInterface
         $userId = $this->database->getPdo()->lastInsertId();
 
         // Retour de l'identifiant du user ajouté.
-        return $userId;
+        return (int) $userId;
+    } catch (PDOException $e){
+         error_log("Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage());
+        return null;
     }
+}
     public function removeUser(int $id): bool
     {
         // Définition de la requête SQL pour supprimer un user
