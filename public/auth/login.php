@@ -2,9 +2,10 @@
 // Constantes
 
 use Managers\UserManager;
-require_once __DIR__ . '/../src/classes/Managers/UserManager.php';
-const DATABASE_CONFIGURATION_FILE = __DIR__ . '/../src/config/database.ini';
-require_once __DIR__ . '/../src/i18n/load-translation.php';
+
+require_once __DIR__ . '/../../src/classes/Managers/UserManager.php';
+const DATABASE_CONFIGURATION_FILE = __DIR__ . '/../../src/config/database.ini';
+require_once __DIR__ . '/../../src/i18n/load-translation.php';
 
 
 //GESTION DES COOKIES
@@ -34,9 +35,9 @@ $userManager = new UserManager($pdo);
 // Démarre la session
 session_start();
 
-// Si l'utilisateur est déjà connecté, le rediriger vers l'accueil
+// Si l'utilisateur est déjà connecté, le rediriger vers page privée
 if (isset($_SESSION['user_id'])) {
-    header('Location: ../index.php');
+    header('Location: ../private.php');
     exit();
 }
 
@@ -57,17 +58,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Récupérer l'utilisateur de la base de données
             $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username');
             $stmt->execute(['username' => $username]);
-            $user = $stmt->fetch();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // Vérifier le mot de passe
             if ($user && password_verify($password, $user['password'])) {
                 // Authentification réussie - stocker les informations dans la session
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
-                $_SESSION['role'] = $user['role'];
+                $_SESSION['email'] = $user['email'];
 
-                // Rediriger vers la page d'accueil
-                header('Location: ./index.php');
+                // Rediriger vers la page privée
+                header('Location: ../private.php');
                 exit();
             } else {
                 // Authentification échouée
@@ -86,36 +87,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <title><?= htmlspecialchars($traductions['login'])?></title>
+    <title><?= htmlspecialchars($traductions['login']) ?></title>
 </head>
 
 <body>
     <main class="container">
-        <h1><?= htmlspecialchars($traductions['login'])?></h1>
+        <h1><?= htmlspecialchars($traductions['login']) ?></h1>
 
         <?php if ($error): ?>
             <article style="background-color: var(--pico-del-color);">
-                <p><strong><?= htmlspecialchars($traductions['error'])?> : </strong> <?= htmlspecialchars($error) ?></p>
+                <p><strong><?= htmlspecialchars($traductions['error']) ?> : </strong> <?= htmlspecialchars($error) ?></p>
             </article>
         <?php endif; ?>
 
         <form method="post">
             <label for="username">
-                <?= htmlspecialchars($traductions['username'])?>
+                <?= htmlspecialchars($traductions['username']) ?>
                 <input type="text" id="username" name="username" required autofocus>
             </label>
 
             <label for="password">
-                <?= htmlspecialchars($traductions['password'])?>
+                <?= htmlspecialchars($traductions['password']) ?>
                 <input type="password" id="password" name="password" required>
             </label>
 
-            <button type="submit"><?= htmlspecialchars($traductions['login'])?></button>
+            <button type="submit"><?= htmlspecialchars($traductions['login']) ?></button>
         </form>
 
-        <p><?= htmlspecialchars($traductions['no_account_yet'])?> <a href="register.php"><?= htmlspecialchars($traductions['create_account'])?></a></p>
+        <p><?= htmlspecialchars($traductions['no_account_yet']) ?> <a href="create.php"><?= htmlspecialchars($traductions['create_account']) ?></a></p>
 
-        <p><a href="./index.php"><?= htmlspecialchars($traductions['back_to_home_screen'])?></a></p>
+        <p><a href="../private.php"><?= htmlspecialchars($traductions['back_to_home_screen']) ?></a></p>
     </main>
 </body>
 

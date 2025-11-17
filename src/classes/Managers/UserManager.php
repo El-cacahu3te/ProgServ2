@@ -36,49 +36,56 @@ class UserManager implements UserManagerInterface
         // Retour de tous les users
         return $users;
     }
-    public function addUser(User $user): ?int {
-    try {
-        // Définition de la requête SQL pour ajouter un jeu
-        $sql = "INSERT INTO users(
+    public function addUser(User $user): ?int
+    {
+        try {
+            // Définition de la requête SQL pour ajouter un user
+            // Rôle à ajouter un jour
+            $sql = "INSERT INTO users(
             username,
             password,
             email,
-            role,
             birthdate,
-            biography,
+            bio
             
         ) VALUES (
             :username,
             :password,
             :email,
-            :role,
             :birthdate,
-            :biography
+            :bio
         )";
 
-        // Préparation de la requête SQL
-        $stmt = $this->database->getPdo()->prepare($sql);
+            // Préparation de la requête SQL
+            $stmt = $this->database->getPdo()->prepare($sql);
 
-        // Lien avec les paramètres
-        $stmt->bindValue(':username', $user->getUsername(), PDO::PARAM_STR);
-        $stmt->bindValue(':password', $user->getPassword(), PDO::PARAM_STR);
-        $stmt->bindValue(':email', $user->getEmail(),PDO::PARAM_STR);
-        $stmt->bindValue(':role', $user->getRole(),PDO::PARAM_STR);
-        $stmt->bindValue(':birthdate', $user->getBirthdate(),PDO::PARAM_STR);
-        
-        // Exécution de la requête SQL pour ajouter un user
-        $stmt->execute();
+            // Lien avec les paramètres
+            $stmt->bindValue(':username', $user->getUsername(), PDO::PARAM_STR);
 
-        // Récupération de l'identifiant du user ajouté
-        $userId = $this->database->getPdo()->lastInsertId();
+            // Hash le mdp
+            
+            $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+            $stmt->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
 
-        // Retour de l'identifiant du user ajouté.
-        return (int) $userId;
-    } catch (PDOException $e){
-         error_log("Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage());
-        return null;
+            $stmt->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
+            // $stmt->bindValue(':role', $user->getRole(),PDO::PARAM_STR);
+            $stmt->bindValue(':birthdate', $user->getBirthdate()->format('Y-m-d'), PDO::PARAM_STR);
+            $stmt->bindValue(':bio', $user->getBiography(), PDO::PARAM_STR);
+
+            // Exécution de la requête SQL pour ajouter un user
+            $stmt->execute();
+
+            // Récupération de l'identifiant du user ajouté
+            $userId = $this->database->getPdo()->lastInsertId();
+            
+
+            // Retour de l'identifiant du user ajouté.
+            return (int) $userId;
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'ajout de l'utilisateur : " . $e->getMessage());
+            return null;
+        }
     }
-}
     public function removeUser(int $id): bool
     {
         // Définition de la requête SQL pour supprimer un user

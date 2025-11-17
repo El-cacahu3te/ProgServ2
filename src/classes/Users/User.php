@@ -22,9 +22,9 @@ class User implements UserInterface
    {
         $this->id = $id;
         $this->username = $username;
-        $this->password = password_hash($password, PASSWORD_DEFAULT);
+        $this->password = $password;
         $this->email = $email;
-        $this->role = $role;
+      //  $this->role = $role;
         $this->birthdate = $birthdate;
         $this->biography = $biography;
       

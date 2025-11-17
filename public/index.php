@@ -86,7 +86,7 @@ $games = $stmt->fetchAll();
 
 <body>
     <main class="container">
-        <form class = "login" action = login.php>
+        <form class = "login" action = auth/login.php>
             <button type="submit"><?= htmlspecialchars($traductions['login']) ?></button>
         </form>
         <h1><?= htmlspecialchars($traductions['welcome']) ?></h1>

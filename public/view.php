@@ -90,19 +90,15 @@ $gameWithEverything = $gamesManager->getGameWithEverything($game_id);
                     <th><?= htmlspecialchars($traductions['release_date'])?></th>
                     <th><?= htmlspecialchars($traductions['game_min_age'])?></th>
                     <th><?= htmlspecialchars($traductions['studio_name'])?></th>
-                    <th><?= htmlspecialchars($traductions['view'])?></th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($gamesWithStudio as $game) { ?>
                     <tr>
-                        <td><?= htmlspecialchars($game['game_name']) ?></td>
-                        <td><?= htmlspecialchars($game['release_date']) ?></td>
-                        <td><?= htmlspecialchars($game['game_min_age']) ?></td>
-                        <td><?= htmlspecialchars($game['studio_name']) ?></td>
-                        <td><a href="view.php?id=<?=$game['game_id']?>">x</a></td>
+                        <td><?= htmlspecialchars($gameWithEverything['game_name']) ?></td>
+                        <td><?= htmlspecialchars($gameWithEverything['release_date']) ?></td>
+                        <td><?= htmlspecialchars($gameWithEverything['game_min_age']) ?></td>
+                        <td><?= htmlspecialchars($gameWithEverything['studio_name']) ?></td>
                     </tr>
-                <?php } ?>
             </tbody>
         </table>
     </main>
