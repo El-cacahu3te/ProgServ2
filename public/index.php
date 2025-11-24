@@ -3,12 +3,9 @@
 require_once __DIR__ . '/../src/utils/autoloader.php';
 require_once __DIR__ . '/../src/classes/Managers/GamesManager.php';
 const DATABASE_CONFIGURATION_FILE = __DIR__ . '/../src/config/database.ini';
-const MAIL_CONFIGURATION_FILE = __DIR__ . '/../src/config/mail.ini';
 require_once __DIR__ . '/../src/i18n/load-translation.php';
 
 use Managers\GamesManager;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 // GESTION DES COOKIES
 // Constantes
@@ -29,52 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: index.php');
     exit;
 }
-
-//GESTION DES MAILS
-$config = parse_ini_file(MAIL_CONFIGURATION_FILE, true);
-
-if (!$config) {
-   throw new Exception("Erreur lors de la lecture du fichier de configuration : " .
-         MAIL_CONFIGURATION_FILE);
-}
-
-$host = $config['host'];
-$port = filter_var($config['port'], FILTER_VALIDATE_INT);
-$authentication = filter_var($config['authentication'], FILTER_VALIDATE_BOOLEAN);
-$username = $config['username'];
-$password = $config['password'];
-$from_email = $config['from_email'];
-$from_name = $config['from_name'];
-
-$mail = new PHPMailer(true);
-
-try {
-    $mail->isSMTP();
-    $mail->Host = $host;
-    $mail->Port = $port;
-    $mail->SMTPAuth = $authentication;
-    $mail->Username = $username;
-    $mail->Password = $password;
-    $mail->CharSet = "UTF-8";
-    $mail->Encoding = "base64";
-
-    // Expéditeur et destinataire
-    $mail->setFrom($from_email, $from_name);
-    $mail->addAddress('CHANGE_ME', 'CHANGE WITH YOUR NAME');
-
-    // Contenu du mail
-    $mail->isHTML(true);
-    $mail->Subject = 'Here is the subject';
-    $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-    $mail->send();
-
-    echo 'Message has been sent';
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-}
-
 //GESTION DE LA BASE DE DONNEES
 
 // Documentation : https://www.php.net/manual/fr/function.parse-ini-file.php
@@ -105,7 +56,6 @@ $sql = "USE `$database`;";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 
-
 // Définition de la requête SQL pour récupérer tous les utilisateurs
 $sql = "SELECT * FROM games";
 
@@ -127,17 +77,19 @@ $games = $stmt->fetchAll();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="stylesheet" href="./../src/utils/style.css">
     <title><?= htmlspecialchars($traductions['title']) ?></title>
 </head>
 
 <body>
     <main class="container">
+        <h1><?= htmlspecialchars($traductions['welcome']) ?></h1>
         <form class = "login" action = auth/login.php>
             <button type="submit"><?= htmlspecialchars($traductions['login']) ?></button>
         </form>
-        <h1><?= htmlspecialchars($traductions['welcome']) ?></h1>
-
+        <form class = "create" action = auth/create.php>
+            <button type="submit"><?= htmlspecialchars($traductions['create_account']) ?></button>
+        </form>
         <form method="post" action="index.php">
         <label for="language"><?= htmlspecialchars($traductions['choose_language']) ?></label>
         <select name="language" id="language">
@@ -146,7 +98,7 @@ $games = $stmt->fetchAll();
         </select>
         <button type="submit"><?= htmlspecialchars($traductions['submit']) ?></button>
     </form>
-
+        
         <table>
             <thead>
                 <tr>

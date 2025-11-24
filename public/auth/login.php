@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="stylesheet" href="./../../src/utils/style.css">
     <title><?= htmlspecialchars($traductions['login']) ?></title>
 </head>
 
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1><?= htmlspecialchars($traductions['login']) ?></h1>
 
         <?php if ($error): ?>
-            <article style="background-color: var(--pico-del-color);">
+            <article>
                 <p><strong><?= htmlspecialchars($traductions['error']) ?> : </strong> <?= htmlspecialchars($error) ?></p>
             </article>
         <?php endif; ?>
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <p><?= htmlspecialchars($traductions['no_account_yet']) ?> <a href="create.php"><?= htmlspecialchars($traductions['create_account']) ?></a></p>
 
-        <p><a href="../private.php"><?= htmlspecialchars($traductions['back_to_home_screen']) ?></a></p>
+        <p><a href="../index.php"><?= htmlspecialchars($traductions['back_to_home_screen']) ?></a></p>
     </main>
 </body>
 

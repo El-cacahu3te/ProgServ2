@@ -9,12 +9,14 @@ const COOKIE_NAME = 'lang';
 const COOKIE_LIFETIME = 120 * 24 * 60 * 60; // 120 jours
 const DEFAULT_LANG = 'fr';
 
+
 $lang = $_COOKIE[COOKIE_NAME] ?? DEFAULT_LANG;
 $traductions = loadTranslation($lang);
 
-
 use Managers\UserManager;
 use Users\User;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 // Création d'une instance de UserManager
 $userManager = new UserManager();
 
@@ -25,6 +27,24 @@ $birthdate = '';
 $birthdateConverted = null;
 $bio = '';
 $errors = [];
+
+//GESTION DES MAILS
+const MAIL_CONFIGURATION_FILE = __DIR__ . '/../../src/config/mail.ini';
+$config = parse_ini_file(MAIL_CONFIGURATION_FILE, true);
+
+if (!$config) {
+   throw new Exception("Erreur lors de la lecture du fichier de configuration : " .
+         MAIL_CONFIGURATION_FILE);
+}
+
+$mailHost = $config['host'];
+$mailPort = filter_var($config['port'], FILTER_VALIDATE_INT);
+$mailAuthentication = filter_var($config['authentication'], FILTER_VALIDATE_BOOLEAN);
+$mailUsername = $config['username'];
+$mailPassword = $config['password'];
+$from_email = $config['from_email'];
+$from_name = $config['from_name'];
+
 
 // Gère la soumission du formulaire
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -45,18 +65,47 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $email,
             $birthdateConverted,
             $bio
-            //la date de création sera assigné automatiquement 
         );
     } catch (InvalidArgumentException $e) {
         $errors[] = $e->getMessage();
     }
 
-
-    // S'il n'y a pas d'erreurs, ajout de l'utilisateur
+    // S'il n'y a pas d'erreurs, ajout de l'utilisateur et on envoie le mail.
     if (empty($errors)) {
         try {
             // Ajout de l'utilisateur à la base de données
             $userManager->addUser($user);
+
+            //Envoi du mail de confirmation
+            $mail = new PHPMailer(true);
+
+            try {
+                $mail->isSMTP();
+                $mail->Host = $mailHost;
+                $mail->Port = $mailPort;
+                $mail->SMTPAuth = $mailAuthentication;
+                $mail->Username = $mailUsername;
+                $mail->Password = $mailPassword;
+                $mail->CharSet = "UTF-8";
+                $mail->Encoding = "base64";
+
+                // Expéditeur et destinataire
+                $mail->setFrom($from_email, $from_name);
+                $mail->addAddress($email, $username);
+
+                // Contenu du mail
+                $mail->isHTML(true);
+                $mail->Subject = 'Nouveau compte créé';
+                $mail->Body = "
+                    <h3>Le compte de {$username} a été créé !</h3>
+                    <p>L'équipe Gamerat</p>
+                ";
+
+                $mail->send();
+            } catch (Exception $e) {
+                // On log l'erreur mais on ne bloque pas l'inscription
+                error_log("Erreur lors de l'envoi du mail : {$mail->ErrorInfo}");
+            }
 
             // Redirection vers la page d'accueil avec tous les utilisateurs
             header("Location: ../index.php");
@@ -85,12 +134,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./../../src/utils/style.css">
     <title>Créez votre compte</title>
 </head>
 
 <body>
     <main class="container">
-        <h1>Créez votre compte !</h1>
+        <h1><?= htmlspecialchars($traductions['create_your_account']) ?> !</h1>
 
         <?php if ($_SERVER["REQUEST_METHOD"] === "POST") { ?>
             <?php if (empty($errors)) { ?>
@@ -106,20 +156,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php } ?>
 
         <form action="create.php" method="POST">
-            <label for="username"><?= htmlspecialchars($traductions['pseudonym']) ?></label>
+            <label for="username"><?= htmlspecialchars($traductions['username']) ?></label>
             <input type="text" id="username" name="username" value="<?= htmlspecialchars($username ?? ''); ?>" required minlength="2">
+
+            </br>
+            </br>
 
             <label for="password"><?= htmlspecialchars($traductions['password']) ?></label>
             <input type="password" id="password" name="password" value="<?= htmlspecialchars($password ?? ''); ?>" required minlength="6">
 
+            </br>   
+            </br> 
+
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? ''); ?>" required>
+
+            </br>   
+            </br>   
 
             <label for="birthdate"><?= htmlspecialchars($traductions['birthdate']) ?></label>
             <input type="date" id="birthdate" name="birthdate" value="<?= htmlspecialchars($birthdate ?? ''); ?>" required min="0">
 
+            </br>  
+            </br>
+
             <label for="biographie"><?= htmlspecialchars($traductions['biography']) ?></label>
             <input type="text" id="biographie" name="biographie" value="<?= htmlspecialchars($bio ?? ''); ?>" required maxlength="300">
+
+            </br> 
+            </br> 
 
             <button type="submit"><?= htmlspecialchars($traductions['create']) ?></button>
         </form>

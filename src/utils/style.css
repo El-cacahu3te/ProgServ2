@@ -1,0 +1,103 @@
+
+body {
+    background: #0f0f14;
+    color: #e5e5e5;
+    font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+main.container {
+    margin-top: 2rem;
+    background: #15151c;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    width: 100%;
+}
+
+form.language-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+form.language-selector {
+    margin-top: -1rem;
+}
+
+form label {
+    color: #cfd6e0;
+}
+
+select {
+    background: #1c1c24;
+    color: #e5e5e5;
+    border: 1px solid #2c2c35;
+    border-radius: 6px;
+}
+
+h1 {
+    text-align: left;
+    color: #9cc9ff;
+    margin-bottom: 2rem;
+}
+
+button,
+form.login button {
+    background: #1f6feb;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    padding: 0.6rem 1.2rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: transform 0.1s ease, background 0.2s ease;
+}
+
+button:hover {
+    background: #388bfd;
+    transform: scale(1.03);
+}
+
+form.login, form.create {
+    display: flex;
+}
+
+table {
+    width: 100%;
+    background: #1a1a22;
+    border-radius: 8px;
+    overflow: hidden;
+    border-collapse: collapse;
+}
+
+thead tr {
+    background: #23232e;
+    text-align: left;
+}
+
+th {
+    color: #a8b8ff;
+    font-weight: 600;
+}
+
+tbody tr:nth-child(even) {
+    background: #1d1d26;
+}
+
+tbody tr:hover {
+    background: #272732;
+}
+
+td, th {
+    padding: 0.7rem 1rem;
+}
+
+td a {
+    color: #8ab4ff;
+    text-decoration: none;
+}
+
+td a:hover {
+    text-decoration: underline;
+}

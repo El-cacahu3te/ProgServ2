@@ -1,14 +1,13 @@
 <?php
 return [
     'title' => 'Welcome',
-    'welcome' => 'Hello and welcome to our website!',
+    'welcome' => 'Hello and welcome to Gamerat!',
     'choose_language' => 'Choose your preferred language:',
     'game_name' => 'Game name',
     'release_date' => 'Release date',
     'game_min_age' => 'Minimum age',
     'studio_name' => 'Studio name',
     'view' => 'View Game',
-    'pseudonym' => 'Pseudonym',
     'username' => 'Username',
     'password' => 'Password',
     'birthdate' => 'Birthdate',
@@ -16,6 +15,7 @@ return [
     'create' => 'Create',
     'login' => 'Login',
     'create_account' => 'Create account',
+    'create_your_account' => 'Create your account',
     'back_to_home_screen' => 'Go back to home screen',
     'no_account_yet' => 'No account yet?',
 

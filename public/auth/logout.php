@@ -33,8 +33,8 @@ session_destroy();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <title>Déconnexion | Gestion de livres</title>
+    <link rel="stylesheet" href="./../../src/utils/style.css">
+    <title>Déconnexion</title>
 </head>
 
 <body>

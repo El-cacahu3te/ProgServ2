@@ -1,7 +1,7 @@
 <?php
 return [
     'title' => 'Bienvenue',
-    'welcome' => 'Bonjour et bienvenue sur notre site!',
+    'welcome' => 'Bonjour et bienvenue sur Gamerat!',
     'choose_language' => 'Choisissez votre langue préférée:',
     'game_name' => 'Nom du jeu',
     'release_date' => 'Date de sortie',
@@ -16,6 +16,7 @@ return [
     'create' => 'Créer',
     'login' => 'Se connecter',
     'create_account' => 'Créer un compte',
+    'create_your_account' => 'Créez votre compte',
     'back_to_home_screen' => 'Retourner à l\'écran d\'accueuil',
     'no_account_yet' => 'Pas encore de compte ?',
 
