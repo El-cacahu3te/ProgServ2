@@ -30,7 +30,7 @@ $errors = [];
 
 //GESTION DES MAILS
 const MAIL_CONFIGURATION_FILE = __DIR__ . '/../../src/config/mail.ini';
-// ENLEVER balise infomaniak pour utiliser en local
+// changer balise 'infomaniak' en 'local' pour utiliser en local
 $config = parse_ini_file(MAIL_CONFIGURATION_FILE, true)['infomaniak'];
 
 if (!$config) {
