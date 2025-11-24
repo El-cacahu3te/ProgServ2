@@ -30,11 +30,12 @@ $errors = [];
 
 //GESTION DES MAILS
 const MAIL_CONFIGURATION_FILE = __DIR__ . '/../../src/config/mail.ini';
-$config = parse_ini_file(MAIL_CONFIGURATION_FILE, true);
+// ENLEVER balise infomaniak pour utiliser en local
+$config = parse_ini_file(MAIL_CONFIGURATION_FILE, true)['infomaniak'];
 
 if (!$config) {
-   throw new Exception("Erreur lors de la lecture du fichier de configuration : " .
-         MAIL_CONFIGURATION_FILE);
+    throw new Exception("Erreur lors de la lecture du fichier de configuration : " .
+        MAIL_CONFIGURATION_FILE);
 }
 
 $mailHost = $config['host'];
@@ -86,6 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $mail->SMTPAuth = $mailAuthentication;
                 $mail->Username = $mailUsername;
                 $mail->Password = $mailPassword;
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                 $mail->CharSet = "UTF-8";
                 $mail->Encoding = "base64";
 
@@ -134,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./../../src/utils/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Créez votre compte</title>
 </head>
 
@@ -165,26 +167,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label for="password"><?= htmlspecialchars($traductions['password']) ?></label>
             <input type="password" id="password" name="password" value="<?= htmlspecialchars($password ?? ''); ?>" required minlength="6">
 
-            </br>   
-            </br> 
+            </br>
+            </br>
 
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? ''); ?>" required>
 
-            </br>   
-            </br>   
+            </br>
+            </br>
 
             <label for="birthdate"><?= htmlspecialchars($traductions['birthdate']) ?></label>
             <input type="date" id="birthdate" name="birthdate" value="<?= htmlspecialchars($birthdate ?? ''); ?>" required min="0">
 
-            </br>  
+            </br>
             </br>
 
             <label for="biographie"><?= htmlspecialchars($traductions['biography']) ?></label>
             <input type="text" id="biographie" name="biographie" value="<?= htmlspecialchars($bio ?? ''); ?>" required maxlength="300">
 
-            </br> 
-            </br> 
+            </br>
+            </br>
 
             <button type="submit"><?= htmlspecialchars($traductions['create']) ?></button>
         </form>
