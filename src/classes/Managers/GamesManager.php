@@ -177,5 +177,78 @@ class GamesManager implements GamesManagerInterface
         $stmt->bindValue(':studio_id', $studio->getId());
     }
         */
+   
+public function addFavorite(int $userId, int $gameId): bool {
+    // Vérifie si le jeu existe
+    $game = $this->getGameById($gameId);
+    if (!$game) {
+        return false;
+    }
+
+    // Vérifie si le favori existe déjà
+    $stmt = $this->database->getPdo()->prepare("
+        SELECT 1 FROM favorites WHERE users_id = ? AND games_id = ?
+    ");
+    $stmt->execute([$userId, $gameId]);
+    if ($stmt->fetch()) {
+        return false; // Déjà en favori
+    }
+
+    // Ajoute le favori
+    $stmt = $this->database->getPdo()->prepare("
+        INSERT INTO favorites (users_id, games_id) VALUES (?, ?)
+    ");
+    return $stmt->execute([$userId, $gameId]);
+}
+
+/**
+ * Supprime un jeu des favoris d'un utilisateur.
+ */
+public function removeFavorite(int $userId, int $gameId): bool {
+    $stmt = $this->database->getPdo()->prepare("
+        DELETE FROM favorites WHERE users_id = ? AND games_id = ?
+    ");
+    return $stmt->execute([$userId, $gameId]);
+}
+
+/**
+ * Récupère les favoris d'un utilisateur.
+ */
+public function getFavorites(int $userId): array {
+    $stmt = $this->database->getPdo()->prepare("
+        SELECT g.*
+        FROM games g
+        JOIN favorites f ON g.id = f.gamesid
+        WHERE f.users_id =  ? 
+    ");
+    $stmt->execute([$userId]);
+    return $stmt->fetchAll(PDO::FETCH_CLASS, 'Games');
+}
+
+public function isFavorite(int $userId, int $gameId): bool {
+    $stmt = $this->database->getPdo()->prepare("
+        SELECT 1 FROM favorites WHERE users_id = ? AND games_id = ?
+    ");
+    $stmt->execute([$userId, $gameId]);
+    return (bool)$stmt->fetch();
+}
+
+
+public function getGameById(int $id): ?Game {
+    $stmt = $this->database->getPdo()->prepare("SELECT * FROM games WHERE id = ?");
+    $stmt->execute([$id]);
+    $gameData = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $gameData ? new Game(
+        $gameData['id'],
+        $gameData['name'],
+        new DateTime($gameData['release_date']),
+        $gameData['game_min_age'],
+        $gameData['has_single_player'],
+        $gameData['has_multiplayer'],
+        $gameData['has_coop'],
+        $gameData['has_pvp']
+    ) : null;
+}
+
 }
 ;
