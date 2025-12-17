@@ -18,7 +18,7 @@ $traductions = loadTranslation($lang);
 session_start();
 
 // Vérifie si l'utilisateur est authentifié
-$userId = $_SESSION['user_id'] ?? null;
+$userId = $_SESSION['users_id'] ?? null;
 
 // L'utilisateur n'est pas authentifié
 if (!$userId) {
@@ -49,6 +49,12 @@ $email = $_SESSION['email'];
         <p><?= htmlspecialchars($traductions['private_msg']) ?></p>
 
         <p><strong><?= htmlspecialchars($traductions['private_welcome']) ?></strong></p>
+        <p>
+        <a href="games.php"><?= htmlspecialchars($traductions['games_list']) ?></a> |
+        <a href="favorites.php"><?= htmlspecialchars($traductions['my_favorites']) ?></a> |
+        <a href="auth/logout.php"><?= htmlspecialchars($traductions['logout']) ?></a>
+        </p>
+        
         <ul>
             <li><strong><?= htmlspecialchars($traductions['private_id']) ?></strong> <?= htmlspecialchars($userId) ?></li>
             <li><strong><?= htmlspecialchars($traductions['private_username']) ?></strong> <?= htmlspecialchars($username) ?></li>
