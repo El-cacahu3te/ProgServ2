@@ -105,6 +105,10 @@ class GamesManager implements GamesManagerInterface
         }
 
         $gameWithEverything = $rows[0];
+        $gameWithEverything['has_single_player'] = (bool)$gameWithEverything['has_single_player'];
+        $gameWithEverything['has_multiplayer'] = (bool)$gameWithEverything['has_multiplayer'];
+        $gameWithEverything['has_coop'] = (bool)$gameWithEverything['has_coop'];
+        $gameWithEverything['has_pvp'] = (bool)$gameWithEverything['has_pvp'];
         $gameWithEverything['categories'] = [];
         $gameWithEverything['platforms'] = [];
         // On mets toutes les catégories et plateformes bout à bout s'il y en a plusieurs.

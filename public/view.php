@@ -79,7 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -145,32 +144,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endforeach; ?>
         </ul>
 
-        <h3>Plateformes :</h3>
+        <h3><?= htmlspecialchars($traductions['platform']) ?></h3>
         <ul>
             <?php foreach ($gameWithEverything['platforms'] as $platform): ?>
                 <li class="details"><?= htmlspecialchars($platform) ?></li>
             <?php endforeach; ?>
         </ul>
-
-        <table>
-            <thead>
-                <tr>
-                    <th><?= htmlspecialchars($traductions['game_name']) ?></th>
-                    <th><?= htmlspecialchars($traductions['release_date']) ?></th>
-                    <th><?= htmlspecialchars($traductions['game_min_age']) ?></th>
-                    <th><?= htmlspecialchars($traductions['studio_name']) ?></th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><?= htmlspecialchars($gameWithEverything['game_name']) ?></td>
-                    <td><?= htmlspecialchars($gameWithEverything['release_date']) ?></td>
-                    <td><?= htmlspecialchars($gameWithEverything['game_min_age']) ?></td>
-                    <td><?= htmlspecialchars($gameWithEverything['studio_name']) ?></td>
-                </tr>
-            </tbody>
-        </table>
+        <h3><?= htmlspecialchars($traductions['game_mode']) ?></h3>
+        <ul>
+            <?php if ($gameWithEverything['has_single_player']): ?>
+                <li class="details"><?= htmlspecialchars($traductions['single_player']) ?></li>
+            <?php endif; ?>
+            <?php if ($gameWithEverything['has_multiplayer']): ?>
+                <li class="details"><?= htmlspecialchars($traductions['multiplayer']) ?></li>
+            <?php endif; ?>
+            <?php if ($gameWithEverything['has_coop']): ?>
+                <li class="details"><?= htmlspecialchars($traductions['coop']) ?></li>
+            <?php endif; ?>
+            <?php if ($gameWithEverything['has_pvp']): ?>
+                <li class="details"><?= htmlspecialchars($traductions['pvp']) ?></li>
+            <?php endif; ?>
+        </ul>
     </main>
 </body>
 

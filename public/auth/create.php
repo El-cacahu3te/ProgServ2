@@ -108,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // On log l'erreur mais on ne bloque pas l'inscription
                 error_log("Erreur lors de l'envoi du mail : {$mail->ErrorInfo}");
             }
-            
+
             // Pour être connecté à son nouveau compte avant la redirection
             session_start();
             $_SESSION['user_id'] = $userManager->getUserIdByEmail($email); 
@@ -147,6 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
     <main class="container">
+        <p><a href="../index.php">Accueil</a> > <?= htmlspecialchars($traductions['create']) ?></p>
         <h1><?= htmlspecialchars($traductions['create_your_account']) ?> !</h1>
 
         <?php if ($_SERVER["REQUEST_METHOD"] === "POST") { ?>
