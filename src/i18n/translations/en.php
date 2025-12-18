@@ -14,6 +14,7 @@ return [
     'game_mode' => 'Mode de jeu',
     'single_player' => 'Single Player',
     'multiplayer' => 'Multiplayer',
+    'games_list' => 'Games list',
     'coop' => 'Coop',
     'pvp' => 'Player versus Player',
     'favorite' => 'Favorite',
@@ -26,7 +27,6 @@ return [
     'login' => 'Login',
     'create_account' => 'Create account',
     'create_your_account' => 'Create your account',
-    'back_to_home_screen' => 'Go back to home screen',
     'no_account_yet' => 'No account yet?',
 
     'create_title' => 'Créez votre compte',
@@ -39,6 +39,7 @@ return [
     'private_welcome' => 'You are connected:',
     'private_id' => 'User ID',
     'private_username' => 'Username',
+    'my_favorites' => 'Favorites',
 
     'return_home' => 'Go back home',
     'logout' => 'Log out',

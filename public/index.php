@@ -53,7 +53,7 @@ if ($userId) {
     $username = $_SESSION['username'];
     $gamesFavorites = $gamesManager->getFavorites($userId);
     $favoritesIds = array_map(
-        fn($game) => $game['id'],
+        fn($game) => $game['game_id'],
         $gamesFavorites
     );
     $favoritesIds = array_flip($favoritesIds);

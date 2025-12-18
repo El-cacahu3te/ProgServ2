@@ -116,8 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
 
         <p><?= htmlspecialchars($traductions['no_account_yet']) ?> <a href="create.php"><?= htmlspecialchars($traductions['create_account']) ?></a></p>
-
-        <p><a href="../index.php"><?= htmlspecialchars($traductions['back_to_home_screen']) ?></a></p>
     </main>
 </body>
 

@@ -14,6 +14,7 @@ return [
    'game_mode' => 'Game Mode',
     'single_player' => 'Solo',
     'multiplayer' => 'Multijoueur',
+    'games_list' => 'Liste de jeux',
     'coop' => 'Coop',
     'pvp' => 'Joueur contre Joueur',
     'favorite' => 'Favoris',
@@ -40,6 +41,7 @@ return [
     'private_welcome' => 'Vous êtes actuellement connecté.e :',
     'private_id' => 'ID utilisateur',
     'private_username' => 'Nom d\'utilisateur',
+    'my_favorites' => 'Mes favoris',
 
     'return_home' => 'Retour à l\'accueil',
     'logout' => 'Se déconnecter',

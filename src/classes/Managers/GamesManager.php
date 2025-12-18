@@ -241,10 +241,21 @@ class GamesManager implements GamesManagerInterface
     public function getFavorites(int $userId): array
     {
         $stmt = $this->database->getPdo()->prepare("
-        SELECT g.*
+        SELECT 
+            g.id AS game_id,
+            g.name AS game_name,
+            g.release_date AS release_date,
+            g.game_min_age AS game_min_age,
+            g.has_single_player AS has_single_player,
+            g.has_multiplayer AS has_multiplayer,
+            g.has_coop AS has_coop,
+            g.has_pvp AS has_pvp,
+            s.name AS studio_name
         FROM games g
         JOIN users_favorites f ON g.id = f.games_id
-        WHERE f.users_id =  ? 
+        JOIN games_studios gs ON gs.games_id = g.id
+        JOIN studios s ON s.id = gs.studios_id
+        WHERE f.users_id = ?
     ");
         $stmt->execute([$userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
