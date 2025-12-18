@@ -5,9 +5,11 @@ namespace Managers;
 use Games\Game;
 
 require_once __DIR__ . '/../../utils/autoloader.php';
+
 use PDO;
 use Database;
 use PDOException;
+use DateTime;
 
 class GamesManager implements GamesManagerInterface
 {
@@ -49,8 +51,8 @@ class GamesManager implements GamesManagerInterface
         games.has_pvp AS has_pvp,
         studios.name AS studio_name
         FROM games
-        INNER JOIN game_studios ON games.id = game_studios.game_id
-        INNER JOIN studios ON game_studios.studios_id = studios.id;";
+        INNER JOIN games_studios ON games_studios.games_id = games.id
+        INNER JOIN studios ON studios.id = games_studios.studios_id;";
 
         // Préparation de la requête SQL
         $stmt = $this->database->getPdo()->prepare($sql);
@@ -79,15 +81,13 @@ class GamesManager implements GamesManagerInterface
         studios.name AS studio_name,
         categories.name AS category_name,
         platforms.name AS platform_name
-        
         FROM games
-        INNER JOIN game_studios ON games.id = game_studios.game_id
-        INNER JOIN studios ON game_studios.studios_id = studios.id
-        INNER JOIN game_categories ON games.id = game_categories.game_id
-        INNER JOIN categories ON game_categories.category_id = categories.id
-        INNER JOIN game_platforms ON games.id = game_platforms.game_id
-        INNER JOIN platforms ON game_platforms.platform_id = platforms.id
-
+        INNER JOIN games_studios ON games_studios.games_id = games.id
+        INNER JOIN studios ON studios.id = games_studios.studios_id
+        INNER JOIN games_categories ON games_categories.games_id = games.id
+        INNER JOIN categories ON categories.id = games_categories.category_id
+        INNER JOIN games_platforms ON games_platforms.games_id = games.id
+        INNER JOIN platforms ON platforms.id = games_platforms.platforms_id
         WHERE games.id = :id;";
 
         // Préparation de la requête SQL
@@ -97,9 +97,27 @@ class GamesManager implements GamesManagerInterface
         $stmt->execute(['id' => $id]);
 
         // Récupération de tous les jeux
-        $gameWithEverything = $stmt->fetch();
+        $rows = $stmt->fetchAll();
 
-        // Retour de tous les jeux
+        // Si jamais l'id est faux ou ne correspond à aucun jeu.
+        if (!$rows) {
+            return null;
+        }
+
+        $gameWithEverything = $rows[0];
+        $gameWithEverything['categories'] = [];
+        $gameWithEverything['platforms'] = [];
+        // On mets toutes les catégories et plateformes bout à bout s'il y en a plusieurs.
+        foreach ($rows as $row) {
+            if (!in_array($row['category_name'], $gameWithEverything['categories'])) {
+                $gameWithEverything['categories'][] = $row['category_name'];
+            }
+            if (!in_array($row['platform_name'], $gameWithEverything['platforms'])) {
+                $gameWithEverything['platforms'][] = $row['platform_name'];
+            }
+        }
+
+        // Retour du jeu
         return $gameWithEverything;
     }
 
@@ -169,7 +187,7 @@ class GamesManager implements GamesManagerInterface
     /*
     public function linkGameToStudio(Game $game, Studio $studio): void
     {
-        $sql = "INSERT INTO game_studios (gameId, studioId) VALUES (:game_id, :studio_id)";
+        $sql = "INSERT INTO games_studios (games_id, studios_id) VALUES (:game_id, :studio_id)";
 
         $stmt = $this->database->getPdo()->prepare($sql);
 
@@ -177,78 +195,81 @@ class GamesManager implements GamesManagerInterface
         $stmt->bindValue(':studio_id', $studio->getId());
     }
         */
-   
-public function addFavorite(int $userId, int $gameId): bool {
-    // Vérifie si le jeu existe
-    $game = $this->getGameById($gameId);
-    if (!$game) {
-        return false;
+
+    public function addFavorite(int $userId, int $gameId): bool
+    {
+        // Vérifie si le jeu existe
+        $game = $this->getGameById($gameId);
+        if (!$game) {
+            return false;
+        }
+
+        // Vérifie si le favori existe déjà
+        $stmt = $this->database->getPdo()->prepare("
+        SELECT 1 FROM users_favorites WHERE users_id = ? AND games_id = ?
+    ");
+        $stmt->execute([$userId, $gameId]);
+        if ($stmt->fetch()) {
+            return false; // Déjà en favori
+        }
+
+        // Ajoute le favori
+        $stmt = $this->database->getPdo()->prepare("
+        INSERT INTO users_favorites (users_id, games_id) VALUES (?, ?)
+    ");
+        return $stmt->execute([$userId, $gameId]);
     }
 
-    // Vérifie si le favori existe déjà
-    $stmt = $this->database->getPdo()->prepare("
-        SELECT 1 FROM favorites WHERE users_id = ? AND games_id = ?
+    /**
+     * Supprime un jeu des favoris d'un utilisateur.
+     */
+    public function removeFavorite(int $userId, int $gameId): bool
+    {
+        $stmt = $this->database->getPdo()->prepare("
+        DELETE FROM users_favorites WHERE users_id = ? AND games_id = ?
     ");
-    $stmt->execute([$userId, $gameId]);
-    if ($stmt->fetch()) {
-        return false; // Déjà en favori
+        return $stmt->execute([$userId, $gameId]);
     }
 
-    // Ajoute le favori
-    $stmt = $this->database->getPdo()->prepare("
-        INSERT INTO favorites (users_id, games_id) VALUES (?, ?)
-    ");
-    return $stmt->execute([$userId, $gameId]);
-}
-
-/**
- * Supprime un jeu des favoris d'un utilisateur.
- */
-public function removeFavorite(int $userId, int $gameId): bool {
-    $stmt = $this->database->getPdo()->prepare("
-        DELETE FROM favorites WHERE users_id = ? AND games_id = ?
-    ");
-    return $stmt->execute([$userId, $gameId]);
-}
-
-/**
- * Récupère les favoris d'un utilisateur.
- */
-public function getFavorites(int $userId): array {
-    $stmt = $this->database->getPdo()->prepare("
+    /**
+     * Récupère les favoris d'un utilisateur.
+     */
+    public function getFavorites(int $userId): array
+    {
+        $stmt = $this->database->getPdo()->prepare("
         SELECT g.*
         FROM games g
-        JOIN favorites f ON g.id = f.gamesid
+        JOIN users_favorites f ON g.id = f.games_id
         WHERE f.users_id =  ? 
     ");
-    $stmt->execute([$userId]);
-    return $stmt->fetchAll(PDO::FETCH_CLASS, 'Games');
-}
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-public function isFavorite(int $userId, int $gameId): bool {
-    $stmt = $this->database->getPdo()->prepare("
-        SELECT 1 FROM favorites WHERE users_id = ? AND games_id = ?
+    public function isFavorite(int $userId, int $gameId): bool
+    {
+        $stmt = $this->database->getPdo()->prepare("
+        SELECT 1 FROM users_favorites WHERE users_id = ? AND games_id = ?
     ");
-    $stmt->execute([$userId, $gameId]);
-    return (bool)$stmt->fetch();
-}
+        $stmt->execute([$userId, $gameId]);
+        return (bool)$stmt->fetch();
+    }
 
 
-public function getGameById(int $id): ?Game {
-    $stmt = $this->database->getPdo()->prepare("SELECT * FROM games WHERE id = ?");
-    $stmt->execute([$id]);
-    $gameData = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $gameData ? new Game(
-        $gameData['id'],
-        $gameData['name'],
-        new DateTime($gameData['release_date']),
-        $gameData['game_min_age'],
-        $gameData['has_single_player'],
-        $gameData['has_multiplayer'],
-        $gameData['has_coop'],
-        $gameData['has_pvp']
-    ) : null;
-}
-
-}
-;
+    public function getGameById(int $id): ?Game
+    {
+        $stmt = $this->database->getPdo()->prepare("SELECT * FROM games WHERE id = ?");
+        $stmt->execute([$id]);
+        $gameData = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $gameData ? new Game(
+            $gameData['id'],
+            $gameData['name'],
+            new DateTime($gameData['release_date']),
+            $gameData['game_min_age'],
+            $gameData['has_single_player'],
+            $gameData['has_multiplayer'],
+            $gameData['has_coop'],
+            $gameData['has_pvp']
+        ) : null;
+    }
+};

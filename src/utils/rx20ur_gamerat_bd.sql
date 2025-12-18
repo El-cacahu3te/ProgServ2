@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : rx20ur.myd.infomaniak.com
--- Généré le :  mar. 28 oct. 2025 à 14:53
+-- Généré le :  jeu. 18 déc. 2025 à 09:57
 -- Version du serveur :  10.6.19-MariaDB-deb11-log
 -- Version de PHP :  7.4.33
 
@@ -55,6 +55,23 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 (15, 'MOBA'),
 (16, 'MMO'),
 (17, 'Sandbox');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `game`
+--
+
+CREATE TABLE `game` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `release_date` date NOT NULL,
+  `game_min_age` int(11) NOT NULL,
+  `has_single_player` tinyint(1) DEFAULT 0,
+  `has_multiplayer` tinyint(1) DEFAULT 0,
+  `has_coop` tinyint(1) DEFAULT 0,
+  `has_pvp` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 -- --------------------------------------------------------
 
@@ -183,19 +200,19 @@ INSERT INTO `games` (`id`, `name`, `release_date`, `game_min_age`, `has_single_p
 -- --------------------------------------------------------
 
 --
--- Structure de la table `game_categories`
+-- Structure de la table `games_categories`
 --
 
-CREATE TABLE `game_categories` (
-  `game_id` int(11) NOT NULL,
+CREATE TABLE `games_categories` (
+  `games_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
--- Déchargement des données de la table `game_categories`
+-- Déchargement des données de la table `games_categories`
 --
 
-INSERT INTO `game_categories` (`game_id`, `category_id`) VALUES
+INSERT INTO `games_categories` (`games_id`, `category_id`) VALUES
 (1, 1),
 (1, 2),
 (1, 3),
@@ -323,19 +340,19 @@ INSERT INTO `game_categories` (`game_id`, `category_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `game_platforms`
+-- Structure de la table `games_platforms`
 --
 
-CREATE TABLE `game_platforms` (
-  `game_id` int(11) NOT NULL,
-  `platform_id` int(11) NOT NULL
+CREATE TABLE `games_platforms` (
+  `games_id` int(11) NOT NULL,
+  `platforms_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
--- Déchargement des données de la table `game_platforms`
+-- Déchargement des données de la table `games_platforms`
 --
 
-INSERT INTO `game_platforms` (`game_id`, `platform_id`) VALUES
+INSERT INTO `games_platforms` (`games_id`, `platforms_id`) VALUES
 (1, 1),
 (1, 3),
 (1, 4),
@@ -605,19 +622,19 @@ INSERT INTO `game_platforms` (`game_id`, `platform_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `game_studios`
+-- Structure de la table `games_studios`
 --
 
-CREATE TABLE `game_studios` (
+CREATE TABLE `games_studios` (
   `studios_id` int(11) NOT NULL,
-  `game_id` int(11) NOT NULL
+  `games_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
--- Déchargement des données de la table `game_studios`
+-- Déchargement des données de la table `games_studios`
 --
 
-INSERT INTO `game_studios` (`studios_id`, `game_id`) VALUES
+INSERT INTO `games_studios` (`studios_id`, `games_id`) VALUES
 (1, 1),
 (2, 2),
 (3, 3),
@@ -744,21 +761,6 @@ INSERT INTO `platforms` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `reviews`
---
-
-CREATE TABLE `reviews` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `game_id` int(11) NOT NULL,
-  `rating` int(11) NOT NULL CHECK (`rating` between 1 and 5),
-  `comment` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `studios`
 --
 
@@ -829,10 +831,10 @@ INSERT INTO `studios` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `users`
+-- Structure de la table `user`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `username` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -845,39 +847,39 @@ CREATE TABLE `users` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user_favorites`
+-- Structure de la table `users`
 --
 
-CREATE TABLE `user_favorites` (
-  `user_id` int(11) NOT NULL,
-  `game_id` int(11) NOT NULL,
-  `added_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `user_game`
---
-
-CREATE TABLE `user_game` (
+CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `game_id` int(11) NOT NULL,
-  `status` enum('not_started','in_progress','completed') DEFAULT 'not_started',
-  `started_at` date DEFAULT NULL,
-  `completed_at` date DEFAULT NULL
+  `username` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `birthdate` date NOT NULL,
+  `bio` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_admin` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Déchargement des données de la table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `email`, `birthdate`, `bio`, `created_at`, `is_admin`) VALUES
+(1, 'loann', '$2y$12$FoElDFSjKCY0cwPEGHViQe0SSFmL18D6sqKOKPVflfuHezEBI35my', 'loann.juillerat@heig-vd.ch', '1993-06-25', 'Labubu', '2025-11-17 14:05:31', 1),
+(9, 'lolo23', '$2y$12$Tun99p.aqyGASGRsXwa5qumAH6WL8u6ainIUSeC7/4QVZY/qAytkC', 'loannjuillerat@gmail.com', '1999-06-25', '1345', '2025-11-24 19:02:59', 0),
+(10, 'ludelafo', '$2y$12$3QLu9J.1BGs/aWGwvhCIHe7sNeiR3ddTNQP24e3ilg3vX5Cj/xQ9K', 'ludovic.delafontaine@gmail.com', '2025-11-25', 'Yay', '2025-11-25 13:48:20', 1),
+(11, 'elia', '$2y$12$5xdrsGx.H1hESCoo9taThemwR9Y5LvuJXuI5XCb13RHZzzcWQqWpu', 'elia.nicolo14@gmail.com', '2002-09-14', 'Les jeux vidéos c\'est super chouette ', '2025-12-16 14:38:46', 1);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user_wishlist`
+-- Structure de la table `users_favorites`
 --
 
-CREATE TABLE `user_wishlist` (
-  `user_id` int(11) NOT NULL,
-  `game_id` int(11) NOT NULL,
+CREATE TABLE `users_favorites` (
+  `users_id` int(11) NOT NULL,
+  `games_id` int(11) NOT NULL,
   `added_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
@@ -892,30 +894,36 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `game`
+--
+ALTER TABLE `game`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `games`
 --
 ALTER TABLE `games`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `game_categories`
+-- Index pour la table `games_categories`
 --
-ALTER TABLE `game_categories`
-  ADD PRIMARY KEY (`game_id`,`category_id`),
+ALTER TABLE `games_categories`
+  ADD PRIMARY KEY (`games_id`,`category_id`),
   ADD KEY `category_id` (`category_id`);
 
 --
--- Index pour la table `game_platforms`
+-- Index pour la table `games_platforms`
 --
-ALTER TABLE `game_platforms`
-  ADD PRIMARY KEY (`game_id`,`platform_id`),
-  ADD KEY `platform_id` (`platform_id`);
+ALTER TABLE `games_platforms`
+  ADD PRIMARY KEY (`games_id`,`platforms_id`),
+  ADD KEY `platform_id` (`platforms_id`);
 
 --
--- Index pour la table `game_studios`
+-- Index pour la table `games_studios`
 --
-ALTER TABLE `game_studios`
-  ADD PRIMARY KEY (`game_id`,`studios_id`),
+ALTER TABLE `games_studios`
+  ADD PRIMARY KEY (`games_id`,`studios_id`),
   ADD KEY `studios_id` (`studios_id`);
 
 --
@@ -925,18 +933,18 @@ ALTER TABLE `platforms`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `reviews`
---
-ALTER TABLE `reviews`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`,`game_id`),
-  ADD KEY `game_id` (`game_id`);
-
---
 -- Index pour la table `studios`
 --
 ALTER TABLE `studios`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Index pour la table `users`
@@ -947,26 +955,11 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Index pour la table `user_favorites`
+-- Index pour la table `users_favorites`
 --
-ALTER TABLE `user_favorites`
-  ADD PRIMARY KEY (`user_id`,`game_id`),
-  ADD KEY `game_id` (`game_id`);
-
---
--- Index pour la table `user_game`
---
-ALTER TABLE `user_game`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`,`game_id`),
-  ADD KEY `game_id` (`game_id`);
-
---
--- Index pour la table `user_wishlist`
---
-ALTER TABLE `user_wishlist`
-  ADD PRIMARY KEY (`user_id`,`game_id`),
-  ADD KEY `game_id` (`game_id`);
+ALTER TABLE `users_favorites`
+  ADD PRIMARY KEY (`users_id`,`games_id`),
+  ADD KEY `game_id` (`games_id`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -977,6 +970,12 @@ ALTER TABLE `user_wishlist`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT pour la table `game`
+--
+ALTER TABLE `game`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `games`
@@ -991,81 +990,54 @@ ALTER TABLE `platforms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT pour la table `reviews`
---
-ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT pour la table `studios`
 --
 ALTER TABLE `studios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
--- AUTO_INCREMENT pour la table `users`
+-- AUTO_INCREMENT pour la table `user`
 --
-ALTER TABLE `users`
+ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `user_game`
+-- AUTO_INCREMENT pour la table `users`
 --
-ALTER TABLE `user_game`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `game_categories`
+-- Contraintes pour la table `games_categories`
 --
-ALTER TABLE `game_categories`
-  ADD CONSTRAINT `game_categories_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`),
-  ADD CONSTRAINT `game_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
+ALTER TABLE `games_categories`
+  ADD CONSTRAINT `games_categories_ibfk_1` FOREIGN KEY (`games_id`) REFERENCES `games` (`id`),
+  ADD CONSTRAINT `games_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
 
 --
--- Contraintes pour la table `game_platforms`
+-- Contraintes pour la table `games_platforms`
 --
-ALTER TABLE `game_platforms`
-  ADD CONSTRAINT `game_platforms_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`),
-  ADD CONSTRAINT `game_platforms_ibfk_2` FOREIGN KEY (`platform_id`) REFERENCES `platforms` (`id`);
+ALTER TABLE `games_platforms`
+  ADD CONSTRAINT `games_platforms_ibfk_1` FOREIGN KEY (`games_id`) REFERENCES `games` (`id`),
+  ADD CONSTRAINT `games_platforms_ibfk_2` FOREIGN KEY (`platforms_id`) REFERENCES `platforms` (`id`);
 
 --
--- Contraintes pour la table `game_studios`
+-- Contraintes pour la table `games_studios`
 --
-ALTER TABLE `game_studios`
-  ADD CONSTRAINT `game_studios_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`),
-  ADD CONSTRAINT `game_studios_ibfk_2` FOREIGN KEY (`studios_id`) REFERENCES `studios` (`id`);
+ALTER TABLE `games_studios`
+  ADD CONSTRAINT `games_studios_ibfk_1` FOREIGN KEY (`games_id`) REFERENCES `games` (`id`),
+  ADD CONSTRAINT `games_studios_ibfk_2` FOREIGN KEY (`studios_id`) REFERENCES `studios` (`id`);
 
 --
--- Contraintes pour la table `reviews`
+-- Contraintes pour la table `users_favorites`
 --
-ALTER TABLE `reviews`
-  ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`);
-
---
--- Contraintes pour la table `user_favorites`
---
-ALTER TABLE `user_favorites`
-  ADD CONSTRAINT `user_favorites_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `user_favorites_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`);
-
---
--- Contraintes pour la table `user_game`
---
-ALTER TABLE `user_game`
-  ADD CONSTRAINT `user_game_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `user_game_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`);
-
---
--- Contraintes pour la table `user_wishlist`
---
-ALTER TABLE `user_wishlist`
-  ADD CONSTRAINT `user_wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `user_wishlist_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`);
+ALTER TABLE `users_favorites`
+  ADD CONSTRAINT `users_favorites_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `users_favorites_ibfk_2` FOREIGN KEY (`games_id`) REFERENCES `games` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

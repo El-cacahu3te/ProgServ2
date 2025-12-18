@@ -18,14 +18,11 @@ $lang = $_COOKIE[COOKIE_NAME] ?? DEFAULT_LANG;
 
 $traductions = loadTranslation($lang);
 
-// Changer la langue préférée
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $lang = $_POST['language'] ?? DEFAULT_LANG;
+// Démarre la session
+session_start();
 
-    setcookie(COOKIE_NAME, $lang, time() + COOKIE_LIFETIME);
-    header('Location: index.php');
-    exit;
-}
+// Vérifie si l'utilisateur est authentifié
+$userId = $_SESSION['user_id'] ?? null;
 
 // GESTION RECUP ID
 
@@ -56,6 +53,33 @@ $gamesManager = new GamesManager($pdo);
 
 $gameWithEverything = $gamesManager->getGameWithEverything($game_id);
 
+if ($userId) {
+    $username = $_SESSION['username'];
+    $isFavorite = $gamesManager->isFavorite($userId, $game_id);
+} else {
+    $username = $traductions['guest'];
+}
+
+// Gérer les formulaires
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['language'])) {
+        $lang = $_POST['language'] ?? DEFAULT_LANG;
+        setcookie(COOKIE_NAME, $lang, time() + COOKIE_LIFETIME);
+        header('Location: view.php?id=' . $gameId);
+        exit;
+    }
+    if ($userId && isset($_POST['action'], $_POST['game_id'])) {
+        $gameId = (int)$_POST['game_id'];
+        if ($_POST['action'] === 'addFavorite') {
+            $gamesManager->addFavorite($userId, $gameId);
+        } elseif ($_POST['action'] === 'removeFavorite') {
+            $gamesManager->removeFavorite($userId, $gameId);
+        }
+        header('Location: view.php?id=' . $gameId);
+        exit;
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -66,39 +90,85 @@ $gameWithEverything = $gamesManager->getGameWithEverything($game_id);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <link rel="stylesheet" href="./css/style.css">
-    <title><?= htmlspecialchars($traductions['title']) ?></title>
+    <title><?= htmlspecialchars($gameWithEverything['game_name']) ?></title>
 </head>
 
 <body>
-    <main class="container">
-        <h1><?= htmlspecialchars($traductions['title']) ?></h1>
-        <p><?= htmlspecialchars($traductions['welcome']) ?></p>
 
-        <form method="post" action="index.php">
-        <label for="language"><?= htmlspecialchars($traductions['choose_language']) ?></label>
-        <select name="language" id="language">
-            <option value="fr" <?= $lang === 'fr' ? ' selected' : '' ?>><?= htmlspecialchars($traductions['languages']['fr']) ?></option>
-            <option value="en" <?= $lang === 'en' ? ' selected' : '' ?>><?= htmlspecialchars($traductions['languages']['en']) ?></option>
-        </select>
-        <button type="submit"><?= htmlspecialchars($traductions['submit']) ?></button>
-    </form>
+    <main class="container">
+        <p><a href="index.php">Accueil</a> > <?= htmlspecialchars($gameWithEverything['game_name']) ?></p>
+        <form method="post" action="view.php?id=<?= $gameWithEverything['game_id'] ?>">
+            <label for="language"><?= htmlspecialchars($traductions['choose_language']) ?></label>
+            <select name="language" id="language">
+                <option value="fr" <?= $lang === 'fr' ? ' selected' : '' ?>><?= htmlspecialchars($traductions['languages']['fr']) ?></option>
+                <option value="en" <?= $lang === 'en' ? ' selected' : '' ?>><?= htmlspecialchars($traductions['languages']['en']) ?></option>
+            </select>
+            <button type="submit"><?= htmlspecialchars($traductions['submit']) ?></button>
+        </form>
+        <?php if (!$userId): ?>
+            <form class="login" action="auth/login.php">
+                <button type="submit"><?= htmlspecialchars($traductions['login']) ?></button>
+            </form>
+            <form class="create" action="auth/create.php">
+                <button type="submit"><?= htmlspecialchars($traductions['create_account']) ?></button>
+            </form>
+        <?php else: ?>
+            <h2><?= htmlspecialchars($traductions['userWelcome']) ?> <a href="private.php"><?= htmlspecialchars($username) ?></a></h2>
+        <?php endif; ?>
+        <h1>
+            <?= htmlspecialchars($gameWithEverything['game_name']) ?>
+            <?php if ($userId): ?>
+                <?php if ($isFavorite): ?>
+                    <form method="post" style="display:inline">
+                        <input type="hidden" name="action" value="removeFavorite">
+                        <input type="hidden" name="game_id" value="<?= $gameWithEverything['game_id'] ?>">
+                        <button class="empty" type="submit" class="favorite">❤️</button>
+                    </form>
+                <?php else: ?>
+                    <form method="post" style="display:inline">
+                        <input type="hidden" name="action" value="addFavorite">
+                        <input type="hidden" name="game_id" value="<?= $gameWithEverything['game_id'] ?>">
+                        <button class="empty" type="submit" class="favorite">🤍</button>
+                    </form>
+                <?php endif; ?>
+            <?php endif; ?>
+        </h1>
+
+        <h2><?= htmlspecialchars($gameWithEverything['studio_name']) ?></h2>
+        <span class="details"><?= htmlspecialchars($traductions['release_date']) ?>: <?= htmlspecialchars($gameWithEverything['release_date']) ?></span>
+        <span class="details"><?= htmlspecialchars($traductions['game_min_age']) ?>: <?= htmlspecialchars($gameWithEverything['game_min_age']) ?></span>
+
+        <h3>Catégories :</h3>
+        <ul>
+            <?php foreach ($gameWithEverything['categories'] as $category): ?>
+                <li class="details" class="details"><?= htmlspecialchars($category) ?></li>
+            <?php endforeach; ?>
+        </ul>
+
+        <h3>Plateformes :</h3>
+        <ul>
+            <?php foreach ($gameWithEverything['platforms'] as $platform): ?>
+                <li class="details"><?= htmlspecialchars($platform) ?></li>
+            <?php endforeach; ?>
+        </ul>
 
         <table>
             <thead>
                 <tr>
-                    <th><?= htmlspecialchars($traductions['game_name'])?></th>
-                    <th><?= htmlspecialchars($traductions['release_date'])?></th>
-                    <th><?= htmlspecialchars($traductions['game_min_age'])?></th>
-                    <th><?= htmlspecialchars($traductions['studio_name'])?></th>
+                    <th><?= htmlspecialchars($traductions['game_name']) ?></th>
+                    <th><?= htmlspecialchars($traductions['release_date']) ?></th>
+                    <th><?= htmlspecialchars($traductions['game_min_age']) ?></th>
+                    <th><?= htmlspecialchars($traductions['studio_name']) ?></th>
+
                 </tr>
             </thead>
             <tbody>
-                    <tr>
-                        <td><?= htmlspecialchars($gameWithEverything['game_name']) ?></td>
-                        <td><?= htmlspecialchars($gameWithEverything['release_date']) ?></td>
-                        <td><?= htmlspecialchars($gameWithEverything['game_min_age']) ?></td>
-                        <td><?= htmlspecialchars($gameWithEverything['studio_name']) ?></td>
-                    </tr>
+                <tr>
+                    <td><?= htmlspecialchars($gameWithEverything['game_name']) ?></td>
+                    <td><?= htmlspecialchars($gameWithEverything['release_date']) ?></td>
+                    <td><?= htmlspecialchars($gameWithEverything['game_min_age']) ?></td>
+                    <td><?= htmlspecialchars($gameWithEverything['studio_name']) ?></td>
+                </tr>
             </tbody>
         </table>
     </main>

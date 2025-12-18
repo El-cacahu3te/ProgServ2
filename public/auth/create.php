@@ -108,6 +108,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // On log l'erreur mais on ne bloque pas l'inscription
                 error_log("Erreur lors de l'envoi du mail : {$mail->ErrorInfo}");
             }
+            
+            // Pour être connecté à son nouveau compte avant la redirection
+            session_start();
+            $_SESSION['user_id'] = $userManager->getUserIdByEmail($email); 
+            $_SESSION['username'] = $username;
 
             // Redirection vers la page d'accueil avec tous les utilisateurs
             header("Location: ../index.php");

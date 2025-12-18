@@ -2,11 +2,16 @@
 return [
     'title' => 'Bienvenue',
     'welcome' => 'Bonjour et bienvenue sur Gamerat!',
+    'userWelcome' => 'Vous êtes connecté en tant que : ',
+    'guest' => 'Invité',
     'choose_language' => 'Choisissez votre langue préférée:',
     'game_name' => 'Nom du jeu',
     'release_date' => 'Date de sortie',
     'game_min_age' => 'Age minimum',
     'studio_name' => 'Nom du studio',
+    'game_category' => 'Genres',
+    'game_type' => 'Type',
+    'favorite' => 'Favoris',
     'view' => 'Voir jeu',
     'pseudonym' => 'Pseudonyme',
     'username' => 'Nom d\'utilisateur',
@@ -30,7 +35,7 @@ return [
     'private_welcome' => 'Vous êtes actuellement connecté.e :',
     'private_id' => 'ID utilisateur',
     'private_username' => 'Nom d\'utilisateur',
-    
+
     'return_home' => 'Retour à l\'accueil',
     'logout' => 'Se déconnecter',
 

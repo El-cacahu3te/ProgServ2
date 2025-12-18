@@ -18,7 +18,7 @@ $traductions = loadTranslation($lang);
 session_start();
 
 // Vérifie si l'utilisateur est authentifié
-$userId = $_SESSION['users_id'] ?? null;
+$userId = $_SESSION['user_id'] ?? null;
 
 // L'utilisateur n'est pas authentifié
 if (!$userId) {

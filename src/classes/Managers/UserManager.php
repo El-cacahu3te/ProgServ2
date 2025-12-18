@@ -63,7 +63,7 @@ class UserManager implements UserManagerInterface
             $stmt->bindValue(':username', $user->getUsername(), PDO::PARAM_STR);
 
             // Hash le mdp
-            
+
             $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
             $stmt->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
 
@@ -77,7 +77,7 @@ class UserManager implements UserManagerInterface
 
             // Récupération de l'identifiant du user ajouté
             $userId = $this->database->getPdo()->lastInsertId();
-            
+
 
             // Retour de l'identifiant du user ajouté.
             return (int) $userId;
@@ -99,5 +99,12 @@ class UserManager implements UserManagerInterface
 
         // Exécution de la requête SQL pour supprimer un user
         return $stmt->execute();
+    }
+    public function getUserIdByEmail(string $email): ?int
+    {
+        $stmt = $this->database->getPdo()->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? (int)$row['id'] : null;
     }
 };
