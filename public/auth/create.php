@@ -147,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
     <main class="container">
-        <p><a href="../index.php">Accueil</a> > <?= htmlspecialchars($traductions['create']) ?></p>
+        <p><a href="../index.php"><?= htmlspecialchars($traductions['home']) ?></a> > <?= htmlspecialchars($traductions['create']) ?></p>
         <h1><?= htmlspecialchars($traductions['create_your_account']) ?> !</h1>
 
         <?php if ($_SERVER["REQUEST_METHOD"] === "POST") { ?>

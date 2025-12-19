@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <main class="container">
-        <p><a href="../index.php">Accueil</a> > <?= htmlspecialchars($traductions['login']) ?></p>
+        <p><a href="../index.php"><?= htmlspecialchars($traductions['home']) ?></a> > <?= htmlspecialchars($traductions['login']) ?></p>
         <h1><?= htmlspecialchars($traductions['login']) ?></h1>
 
         <?php if ($error): ?>

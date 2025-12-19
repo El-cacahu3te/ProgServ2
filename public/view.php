@@ -61,15 +61,19 @@ if ($userId) {
 }
 
 // Gérer les formulaires
+// Convertit le game_id en int si jamais. Null pour pas renvoyer un id=0
+$gameId = isset($_POST['game_id']) ? (int)$_POST['game_id'] : null;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['language'])) {
+    // Gère les cookies
+    if (isset($_POST['language']) && $gameId !== null) {
         $lang = $_POST['language'] ?? DEFAULT_LANG;
         setcookie(COOKIE_NAME, $lang, time() + COOKIE_LIFETIME);
         header('Location: view.php?id=' . $gameId);
         exit;
     }
+    // Gère les favoris
     if ($userId && isset($_POST['action'], $_POST['game_id'])) {
-        $gameId = (int)$_POST['game_id'];
         if ($_POST['action'] === 'addFavorite') {
             $gamesManager->addFavorite($userId, $gameId);
         } elseif ($_POST['action'] === 'removeFavorite') {
@@ -95,14 +99,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
     <main class="container">
-        <p><a href="index.php">Accueil</a> > <?= htmlspecialchars($gameWithEverything['game_name']) ?></p>
+        <p><a href="index.php"><?= htmlspecialchars($traductions['home']) ?></a> > <?= htmlspecialchars($gameWithEverything['game_name']) ?></p>
         <form method="post" action="view.php?id=<?= $gameWithEverything['game_id'] ?>">
+            <input type="hidden" name="game_id" value="<?= $gameWithEverything['game_id'] ?>">
             <label for="language"><?= htmlspecialchars($traductions['choose_language']) ?></label>
             <select name="language" id="language">
                 <option value="fr" <?= $lang === 'fr' ? ' selected' : '' ?>><?= htmlspecialchars($traductions['languages']['fr']) ?></option>
                 <option value="en" <?= $lang === 'en' ? ' selected' : '' ?>><?= htmlspecialchars($traductions['languages']['en']) ?></option>
             </select>
-            <button type="submit"><?= htmlspecialchars($traductions['submit']) ?></button>
+            <button value="<?= $gameId ?>" type="submit"><?= htmlspecialchars($traductions['submit']) ?></button>
         </form>
         <?php if (!$userId): ?>
             <form class="login" action="auth/login.php">
@@ -137,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <span class="details"><?= htmlspecialchars($traductions['release_date']) ?>: <?= htmlspecialchars($gameWithEverything['release_date']) ?></span>
         <span class="details"><?= htmlspecialchars($traductions['game_min_age']) ?>: <?= htmlspecialchars($gameWithEverything['game_min_age']) ?></span>
 
-        <h3>Catégories :</h3>
+        <h3><?= htmlspecialchars($traductions['categories']) ?></h3>
         <ul>
             <?php foreach ($gameWithEverything['categories'] as $category): ?>
                 <li class="details" class="details"><?= htmlspecialchars($category) ?></li>
