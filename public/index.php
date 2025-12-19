@@ -81,25 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
-
-/*
-// Sélection de la base de données
-$sql = "USE `$database`;";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-
-// Définition de la requête SQL pour récupérer tous les utilisateurs
-$sql = "SELECT * FROM games";
-
-// Préparation de la requête SQL
-$stmt = $pdo->prepare($sql);
-
-// Exécution de la requête SQL
-$stmt->execute();
-
-// Récupération de tous les utilisateurs
-$games = $stmt->fetchAll();
-*/
 ?>
 
 <!DOCTYPE html>
