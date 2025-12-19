@@ -10,7 +10,7 @@ use Database;
 use PDO;
 use PDOException;
 
-class UserManager implements UserManagerInterface
+class UserManager
 {
     private $database;
 

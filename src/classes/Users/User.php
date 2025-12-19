@@ -11,23 +11,21 @@ class User implements UserInterface
     private string $username;
     private string $password;
     private string $email;
-    private string $role;
     private \DateTime $birthdate;
     private ?string $biography;
-    private \DateTime $created_at; 
+    private \DateTime $created_at;
+    private bool $is_admin;
 
 
 
     public function __construct(?int $id, string $username, ?string $password, string $email, \DateTime $birthdate, ?string $biography)
-   {
+    {
         $this->id = $id;
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
-      //  $this->role = $role;
         $this->birthdate = $birthdate;
         $this->biography = $biography;
-      
     }
 
     //GETTERS
@@ -52,10 +50,6 @@ class User implements UserInterface
         return $this->email;
     }
 
-    public function getRole(): string
-    {
-        return $this->role;
-    }
 
     public function getBirthDate(): \DateTime
     {
@@ -69,12 +63,12 @@ class User implements UserInterface
 
     public function getCreated_at(): \DateTime
     {
-        return $this->created_at; 
+        return $this->created_at;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getIsAdmin(): bool
     {
-        return $this->created_at;
+        return $this->is_admin;
     }
 
 
@@ -95,11 +89,6 @@ class User implements UserInterface
         $this->email = $email;
     }
 
-    public function setRole(string $role): void
-    {
-        $this->role = $role;
-    }
-
     public function setBirthDate(\DateTime $birthdate): void
     {
         $this->birthdate = $birthdate;
@@ -107,7 +96,11 @@ class User implements UserInterface
 
     public function setBiography(string $biography): void
     {
-        $this->biography= $biography;
+        $this->biography = $biography;
     }
-
+    
+    public function setIsAdmin(bool $is_admin): void
+    {
+        $this->is_admin = $is_admin;
+    }
 };

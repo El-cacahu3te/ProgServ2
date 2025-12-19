@@ -11,7 +11,7 @@ use Database;
 use PDOException;
 use DateTime;
 
-class GamesManager implements GamesManagerInterface
+class GamesManager
 {
     private $database;
 
