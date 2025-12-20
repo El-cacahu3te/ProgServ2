@@ -46,9 +46,9 @@ return [
     'private_page' => 'Page privée',
     'private_msg' => 'Cette page est accessible uniquement aux personnes authentifiées.',
     'private_welcome' => 'Vous êtes actuellement connecté.e :',
-    'private_id' => 'ID utilisateur',
-    'private_username' => 'Nom d\'utilisateur',
-    'my_favorites' => 'Mes favoris',
+    'private_username' => 'Nom d\'utilisateur :',
+    'private_role' => 'Rôle :',
+    'my_favorites' => 'Mes favoris :',
 
     'return_home' => 'Retour à l\'accueil',
     'logout' => 'Se déconnecter',

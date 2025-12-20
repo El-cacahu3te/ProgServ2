@@ -101,13 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['gam
 
         <p><?= htmlspecialchars($traductions['private_msg']) ?></p>
         <p><strong><?= htmlspecialchars($traductions['private_welcome']) ?></strong></p>
-        
+
         <ul>
-            <li><strong><?= htmlspecialchars($traductions['private_id']) ?></strong> <?= htmlspecialchars($userId) ?></li>
             <li><strong><?= htmlspecialchars($traductions['private_username']) ?></strong> <?= htmlspecialchars($username) ?></li>
             <li><strong>Email :</strong> <?= htmlspecialchars($email) ?></li>
             <?php if ($isAdmin): ?>
-                <li><strong>Statut :</strong> <span style="color: #9cc9ff;">Administrateur</span></li>
+                <li><strong><?= htmlspecialchars($traductions['private_role']) ?></strong> <span style="color: #9cc9ff;">Administrateur</span></li>
             <?php endif; ?>
         </ul>
 
@@ -149,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['gam
         <?php endif; ?>
 
         <p>
-            <a href="index.php"><?= htmlspecialchars($traductions['return_home']) ?></a> 
+            <a href="index.php"><?= htmlspecialchars($traductions['return_home']) ?></a>
             | <a href="auth/logout.php"><?= htmlspecialchars($traductions['logout']) ?></a>
             <?php if ($isAdmin): ?>
                 | <a href="admin.php" style="color: #9cc9ff; font-weight: bold;">Administration</a>

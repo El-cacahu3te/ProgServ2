@@ -44,9 +44,9 @@ return [
     'private_page' => 'Private page',
     'private_msg' => 'This page is only accessible to signed on users.',
     'private_welcome' => 'You are connected:',
-    'private_id' => 'User ID',
-    'private_username' => 'Username',
-    'my_favorites' => 'Favorites',
+    'private_username' => 'Username:',
+    'private_role' => 'Role:',
+    'my_favorites' => 'Favorites:',
 
     'return_home' => 'Go back home',
     'logout' => 'Log out',
