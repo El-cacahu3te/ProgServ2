@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Pour être connecté à son nouveau compte avant la redirection
             session_start();
-            $_SESSION['user_id'] = $userManager->getUserIdByEmail($email); 
+            $_SESSION['user_id'] = $userId;
             $_SESSION['username'] = $username;
 
             // Redirection vers la page d'accueil avec tous les utilisateurs

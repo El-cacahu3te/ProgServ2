@@ -10,6 +10,7 @@ use PDO;
 use Database;
 use PDOException;
 use DateTime;
+use Exception;
 
 class GamesManager
 {
@@ -232,7 +233,7 @@ class GamesManager
             return $gameId;
         }catch (Exception $e){
             //Tout annuler en cas d'erreur
-            $this->database->getPdo->rollback();
+            $this->database->getPdo()->rollback();
             error_log("Erreur lors de l'ajout du jeu complet : " . $e->getMessage());
             return null;
         }
