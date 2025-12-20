@@ -7,16 +7,12 @@ require_once __DIR__ . '/../src/i18n/load-translation.php';
 const DATABASE_CONFIGURATION_FILE = __DIR__ . '/../src/config/database.ini';
 
 // GESTION DES COOKIES
-// Constantes
 const COOKIE_NAME = 'lang';
-const COOKIE_LIFETIME = 120 * 24 * 60 * 60; // 120 jours
+const COOKIE_LIFETIME = 120 * 24 * 60 * 60;
 const DEFAULT_LANG = 'fr';
 
-// Déterminer la langue préférée
 $lang = $_COOKIE[COOKIE_NAME] ?? DEFAULT_LANG;
-
 $traductions = loadTranslation($lang);
-
 
 // Démarre la session
 session_start();
@@ -24,18 +20,12 @@ session_start();
 // Vérifie si l'utilisateur est authentifié
 $userId = $_SESSION['user_id'] ?? null;
 
-// L'utilisateur n'est pas authentifié
 if (!$userId) {
-    // Redirige vers la page de connexion si l'utilisateur n'est pas authentifié
     header('Location: auth/login.php');
     exit();
 }
 
-// Sinon, récupère les autres informations de l'utilisateur
-$username = $_SESSION['username'];
-$email = $_SESSION['email'];
-
-// Gestion base de données (pour aller récupérer les favoris)
+// Gestion base de données
 $config = parse_ini_file(DATABASE_CONFIGURATION_FILE);
 
 if (!$config) {
@@ -50,11 +40,34 @@ $password = $config['password'];
 
 $pdo = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $dbUsername, $password);
 
-$gamesManager = new GamesManager($pdo);
+$stmt = $pdo->prepare("SELECT username, email, is_admin FROM users WHERE id = ?");
+$stmt->execute([$userId]);
+$userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-//Récupérer les favoris de l'utilisateur
+if (!$userData) {
+    // L'utilisateur n'existe plus en base
+    session_destroy();
+    header('Location: auth/login.php');
+    exit();
+}
+
+// Stocker dans la session pour les prochaines fois
+$_SESSION['username'] = $userData['username'];
+$_SESSION['email'] = $userData['email'];
+$_SESSION['is_admin'] = (bool)$userData['is_admin'];
+
+$username = $userData['username'];
+$email = $userData['email'];
+$isAdmin = (bool)$userData['is_admin'];
+
+// Récupérer le message d'erreur s'il existe
+$errorMessage = $_SESSION['error_message'] ?? '';
+unset($_SESSION['error_message']);
+
+$gamesManager = new GamesManager();
+
+// Récupérer les favoris de l'utilisateur
 $gamesFavorites = $gamesManager->getFavorites($userId);
-
 
 // Gérer la suppression de favoris
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['game_id'])) {
@@ -69,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['gam
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<?= htmlspecialchars($lang) ?>">
 
 <head>
     <meta charset="utf-8">
@@ -82,6 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['gam
     <main class="container">
         <h1><?= htmlspecialchars($traductions['private_page']) ?></h1>
 
+        <?php if ($errorMessage): ?>
+            <div class="error"><?= htmlspecialchars($errorMessage) ?></div>
+        <?php endif; ?>
+
         <p><?= htmlspecialchars($traductions['private_msg']) ?></p>
         <p><strong><?= htmlspecialchars($traductions['private_welcome']) ?></strong></p>
         
@@ -89,6 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['gam
             <li><strong><?= htmlspecialchars($traductions['private_id']) ?></strong> <?= htmlspecialchars($userId) ?></li>
             <li><strong><?= htmlspecialchars($traductions['private_username']) ?></strong> <?= htmlspecialchars($username) ?></li>
             <li><strong>Email :</strong> <?= htmlspecialchars($email) ?></li>
+            <?php if ($isAdmin): ?>
+                <li><strong>Statut :</strong> <span style="color: #9cc9ff;">Administrateur ⭐</span></li>
+            <?php endif; ?>
         </ul>
 
         <h2><?= htmlspecialchars($traductions['my_favorites']) ?></h2>
@@ -128,12 +148,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['gam
             </table>
         <?php endif; ?>
 
-
-        <p><a href="index.php"><?= htmlspecialchars($traductions['return_home']) ?></a> 
-        | <a href="auth/logout.php"><?= htmlspecialchars($traductions['logout']) ?></a> | <a href="admin.php"><?= htmlspecialchars($traductions['gestion_des_jeux']) ?></a></p>
+        <p>
+            <a href="index.php"><?= htmlspecialchars($traductions['return_home']) ?></a> 
+            | <a href="auth/logout.php"><?= htmlspecialchars($traductions['logout']) ?></a>
+            <?php if ($isAdmin): ?>
+                | <a href="admin.php" style="color: #9cc9ff; font-weight: bold;">🛠️ Administration</a>
+            <?php endif; ?>
+        </p>
     </main>
-
-
 </body>
 
 </html>
