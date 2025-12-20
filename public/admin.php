@@ -25,6 +25,17 @@ if (!$userId) {
     exit();
 }
 
+//Donner l'accès uniquement aux admins
+$isAdmin = $_SESSION['is_admin'] ?? 0;
+
+if (!$isAdmin) {
+    // Rediriger vers la page privée avec un message d'erreur
+    $_SESSION['error_message'] = "Accès refusé : vous devez être administrateur pour accéder à cette page.";
+    header('Location: private.php');
+    exit();
+}
+
+
 $username = $_SESSION['username'];
 
 //Gestion de la BD
@@ -194,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="form-group">
-                <label><?= htmlspecialchars($traductions['platform']) ?> * <?= htmlspecialchars($traductions['selection_multiple']) ?></label>
+                <label><?= htmlspecialchars($traductions['platform']) ?> * (<?= htmlspecialchars($traductions['selection_multiple']) ?>)</label>
                 <div class="checkbox-group">
                     <?php foreach ($platforms as $platform): ?>
                         <div class="checkbox-item">

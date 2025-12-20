@@ -51,8 +51,6 @@ return [
     'return_home' => 'Go back home',
     'logout' => 'Log out',
 
-
-
     'languages' => [
         'en' => 'English',
         'fr' => 'French (Français)',

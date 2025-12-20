@@ -66,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
+                $_SESSION['is_admin'] = (bool)$user['is_admin'];
 
                 // Rediriger vers la page privée
                 header('Location: ../private.php');
