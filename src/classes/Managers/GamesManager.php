@@ -174,6 +174,70 @@ class GamesManager
         }
     }
 
+    public function addGameWithEverything(
+        string $name,
+        string $releaseDate,
+        int $minAge,
+        bool $hasSinglePlayer,
+        bool $hasMultiplayer,
+        bool $hasCoop,
+        bool $hasPvp,
+        string $studioName,
+        array $platformIds,
+        array $categoryIds
+    ): int {
+        try{
+            //Créer le jeu de base
+            $game = new Game(
+                null,
+                $name,
+                new DateTime($releaseDate),
+                $minAge,
+                $hasSinglePlayer,
+                $hasMultiplayer,
+                $hasCoop,
+                $hasPvp
+            );
+
+            $gameId = $this->addGame($game);
+
+            //Ajout erreur si ID non trouvé
+            if (!$gameId) {
+                throw new Exception("Échec de l'ajout du jeu");
+            }
+
+            //Lier le studio (ou le créer)
+            $studioId = $this->getOrCreateStudio($studioName);
+            $stmt = this->database->getPdo()->prepare(
+                "INSERT INTO games_platforms (games_id, platforms_id) VALUES (?, ?)"
+            );
+            $stmt->execute([$gameId, $studioId]);
+
+            //Lier les platerformes
+            $stmt = $this->database->getPdo()->prepare(
+                "INSERT INTO games_platforms (games_id, platforms_id) VALUES (?, ?)"
+            );
+            foreach ($platformIds as $platformId) {
+                $stmt->execute([$gameId, $platformId]);
+            }
+
+            //Lier les catégories
+            $stmt = $this->database->getPdo()->prepare(
+                "INSERT INTO games_categories (games_id, category_id) VALUES (?, ?)"
+            );
+            foreach ($categoryIds as $categoryId) {
+                $stmt->execute([$gameId, $categoryId]);
+            }
+
+            return $gameId;
+        }catch (Exception $e){
+            //Tout annuler en cas d'erreur
+            $this->database->getPdo->rollback();
+            error_log("Erreur lors de l'ajout du jeu complet : " . $e->getMessage());
+            return null;
+        }
+    }
+
     public function removeGame(int $id): bool
     {
         // Définition de la requête SQL pour supprimer un jeu
@@ -188,18 +252,10 @@ class GamesManager
         // Exécution de la requête SQL pour supprimer un jeu
         return $stmt->execute();
     }
-    /*
-    public function linkGameToStudio(Game $game, Studio $studio): void
-    {
-        $sql = "INSERT INTO games_studios (games_id, studios_id) VALUES (:game_id, :studio_id)";
 
-        $stmt = $this->database->getPdo()->prepare($sql);
 
-        $stmt->bindValue(':game_id', $game->getId());
-        $stmt->bindValue(':studio_id', $studio->getId());
-    }
-        */
 
+    // Gestion des favoris
     public function addFavorite(int $userId, int $gameId): bool
     {
         // Vérifie si le jeu existe
@@ -286,5 +342,18 @@ class GamesManager
             $gameData['has_coop'],
             $gameData['has_pvp']
         ) : null;
+    }
+
+    public function getOrCreateStudio(string $studioName): int
+    {
+        // Cherche si le studio existe déjà
+        $studio = $this->getStudioByName($studioName);
+
+        if ($studio) {
+            return (int)$studio['id'];
+        }
+
+        // Sinon, on le crée
+        return $this->addStudio($studioName);
     }
 };
