@@ -38,7 +38,7 @@ $database = $config['database'];
 $dbUsername = $config['username'];
 $password = $config['password'];
 
-$pdo = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $dbUsername, $password);
+$pdo = new PDO("mysql:host=$host;port=$port;dbname=$database;charset=utf8mb4", $dbUsername, $password);
 
 $stmt = $pdo->prepare("SELECT username, email, is_admin FROM users WHERE id = ?");
 $stmt->execute([$userId]);
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['gam
             <li><strong><?= htmlspecialchars($traductions['private_username']) ?></strong> <?= htmlspecialchars($username) ?></li>
             <li><strong>Email :</strong> <?= htmlspecialchars($email) ?></li>
             <?php if ($isAdmin): ?>
-                <li><strong>Statut :</strong> <span style="color: #9cc9ff;">Administrateur ⭐</span></li>
+                <li><strong>Statut :</strong> <span style="color: #9cc9ff;">Administrateur</span></li>
             <?php endif; ?>
         </ul>
 
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['gam
             <a href="index.php"><?= htmlspecialchars($traductions['return_home']) ?></a> 
             | <a href="auth/logout.php"><?= htmlspecialchars($traductions['logout']) ?></a>
             <?php if ($isAdmin): ?>
-                | <a href="admin.php" style="color: #9cc9ff; font-weight: bold;">🛠️ Administration</a>
+                | <a href="admin.php" style="color: #9cc9ff; font-weight: bold;">Administration</a>
             <?php endif; ?>
         </p>
     </main>
