@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($errors)) {
         try {
             // Ajout de l'utilisateur à la base de données
-            $userManager->addUser($user);
+            $userId = $userManager->addUser($user);
 
             //Envoi du mail de confirmation
             $mail = new PHPMailer(true);
