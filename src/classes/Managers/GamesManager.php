@@ -153,7 +153,7 @@ class GamesManager
             // Lien avec les paramètres
             $stmt->bindValue(':name', $game->getName(), PDO::PARAM_STR);
             //  $stmt->bindValue(':image_slug', $game->getImageSlug());
-            $stmt->bindValue(':release_date', $game->getReleaseDate(), PDO::PARAM_STR);
+            $stmt->bindValue(':release_date', $game->getReleaseDate()->format('Y-m-d'), PDO::PARAM_STR);
             $stmt->bindValue(':game_min_age', $game->getMinAge(), PDO::PARAM_INT);
             $stmt->bindValue(':has_single_player', $game->getHasSinglePlayer(), PDO::PARAM_BOOL);
             $stmt->bindValue(':has_multiplayer', $game->getHasMultiPlayer(), PDO::PARAM_BOOL);
@@ -185,7 +185,7 @@ class GamesManager
         string $studioName,
         array $platformIds,
         array $categoryIds
-    ): int {
+    ): ?int {
         try{
             //Créer le jeu de base
             $game = new Game(
@@ -208,8 +208,8 @@ class GamesManager
 
             //Lier le studio (ou le créer)
             $studioId = $this->getOrCreateStudio($studioName);
-            $stmt = this->database->getPdo()->prepare(
-                "INSERT INTO games_platforms (games_id, platforms_id) VALUES (?, ?)"
+            $stmt = $this->database->getPdo()->prepare(
+                "INSERT INTO games_studios (games_id, studios_id) VALUES (?, ?)"
             );
             $stmt->execute([$gameId, $studioId]);
 
@@ -238,22 +238,27 @@ class GamesManager
         }
     }
 
-    public function removeGame(int $id): bool
-    {
-        // Définition de la requête SQL pour supprimer un jeu
-        $sql = "DELETE FROM games WHERE id = :id";
+    public function removeGameWithEverything(int $id) : bool {
+        try {
 
-        // Préparation de la requête SQL
-        $stmt = $this->database->getPdo()->prepare($sql);
+            // Supprimer les relations
+            $this->database->getPdo()->prepare("DELETE FROM games_categories WHERE games_id = ?")->execute([$id]);
+            $this->database->getPdo()->prepare("DELETE FROM games_platforms WHERE games_id = ?")->execute([$id]);
+            $this->database->getPdo()->prepare("DELETE FROM games_studios WHERE games_id = ?")->execute([$id]);
+            $this->database->getPdo()->prepare("DELETE FROM users_favorites WHERE games_id = ?")->execute([$id]);
 
-        // Lien avec le paramètre
-        $stmt->bindValue(':id', $id);
+            // Supprimer le jeu lui-même
+            $stmt = $this->database->getPdo()->prepare("DELETE FROM games WHERE id = ?");
+            $stmt->execute([$id]);
 
-        // Exécution de la requête SQL pour supprimer un jeu
-        return $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            // Annuler en cas d'erreur
+            $this->database->getPdo()->rollBack();
+            error_log("Erreur lors de la suppression du jeu : " . $e->getMessage());
+            return false;
+        }
     }
-
-
 
     // Gestion des favoris
     public function addFavorite(int $userId, int $gameId): bool
@@ -280,9 +285,8 @@ class GamesManager
         return $stmt->execute([$userId, $gameId]);
     }
 
-    /**
-     * Supprime un jeu des favoris d'un utilisateur.
-     */
+    
+    // Supprime un jeu des favoris d'un utilisateur.
     public function removeFavorite(int $userId, int $gameId): bool
     {
         $stmt = $this->database->getPdo()->prepare("
@@ -291,9 +295,7 @@ class GamesManager
         return $stmt->execute([$userId, $gameId]);
     }
 
-    /**
-     * Récupère les favoris d'un utilisateur.
-     */
+    //Récupère les favoris d'un utilisateur.
     public function getFavorites(int $userId): array
     {
         $stmt = $this->database->getPdo()->prepare("
@@ -326,7 +328,7 @@ class GamesManager
         return (bool)$stmt->fetch();
     }
 
-
+    //Helpers
     public function getGameById(int $id): ?Game
     {
         $stmt = $this->database->getPdo()->prepare("SELECT * FROM games WHERE id = ?");
@@ -344,6 +346,46 @@ class GamesManager
         ) : null;
     }
 
+    //Récupère toutes les plateformes
+    public function getAllPlatforms(): array
+    {
+        $stmt = $this->database->getPdo()->prepare("SELECT * FROM platforms ORDER BY name");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Récupère toutes les catégories
+    public function getAllCategories(): array
+    {
+        $stmt = $this->database->getPdo()->prepare("SELECT * FROM categories ORDER BY name");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Récupère tous les studios
+    public function getAllStudios(): array
+    {
+        $stmt = $this->database->getPdo()->prepare("SELECT * FROM studios ORDER BY name");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getStudioByName(string $name): ?array
+    {
+        $stmt = $this->database->getPdo()->prepare("SELECT * FROM studios WHERE LOWER(name) = LOWER(?)");
+        $stmt->execute([$name]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
+    }
+
+    public function addStudio(string $name): int
+    {
+        $stmt = $this->database->getPdo()->prepare("INSERT INTO studios (name) VALUES (?)");
+        $stmt->execute([$name]);
+        return (int)$this->database->getPdo()->lastInsertId();
+    }
+
+    //Ajoute ou crée un studio
     public function getOrCreateStudio(string $studioName): int
     {
         // Cherche si le studio existe déjà
