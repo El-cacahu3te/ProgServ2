@@ -32,6 +32,11 @@ return [
     'create_your_account' => 'Créez votre compte',
     'back_to_home_screen' => 'Retourner à l\'écran d\'accueuil',
     'no_account_yet' => 'Pas encore de compte ?',
+    'gestion_des_jeux' => 'Gestion des jeux',
+    'add_game' => 'Ajouter un jeu',
+    'created_automatically' => 'Créé automatiquement s\'il n\'existe pas',
+    'selection_multiple' => 'sélection multiple',
+    'list_of_games' => 'Liste des jeux',
 
     'create_title' => 'Créez votre compte',
     'create_success' => 'Le formulaire a été soumis avec succès !',

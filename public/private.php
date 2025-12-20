@@ -128,7 +128,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['gam
             </table>
         <?php endif; ?>
 
-        <p><a href="index.php"><?= htmlspecialchars($traductions['return_home']) ?></a> | <a href="auth/logout.php"><?= htmlspecialchars($traductions['logout']) ?></a></p>
+
+        <p><a href="index.php"><?= htmlspecialchars($traductions['return_home']) ?></a> 
+        | <a href="auth/logout.php"><?= htmlspecialchars($traductions['logout']) ?></a> | <a href="admin.php"><?= htmlspecialchars($traductions['gestion_des_jeux']) ?></a></p>
     </main>
 
 

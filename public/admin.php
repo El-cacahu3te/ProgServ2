@@ -124,14 +124,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./css/style.css">
-    <title>Gestion des jeux</title>
+    <title><?= htmlspecialchars($traductions['gestion_des_jeux']) ?></title>
 </head>
 
 <body>
     <main class="container">
-        <p><a href="index.php">Accueil</a> > <a href="private.php">Mon compte</a> > Administration</p>
+        <p><a href="index.php"><?= htmlspecialchars($traductions['return_home']) ?></a> > <a href="private.php"><?= htmlspecialchars($traductions['private_page']) ?></a> > Administration</p>
 
-        <h1>Gestion des jeux</h1>
+        <h1><?= htmlspecialchars($traductions['gestion_des_jeux']) ?></h1>
 
         <?php if ($successMessage): ?>
             <div class="success"><?= htmlspecialchars($successMessage) ?></div>
@@ -142,27 +142,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <!-- formulaire d'ajout -->
-        <h2>Ajouter un nouveau jeu</h2>
+        <h2><?= htmlspecialchars($traductions['add_game']) ?></h2>
         <form method="post" action="admin.php">
             <input type="hidden" name="action" value="add">
 
             <div class="form-group">
-                <label for="name">Nom du jeu *</label>
+                <label for="name"><?= htmlspecialchars($traductions['game_name']) ?></label>
                 <input type="text" id="name" name="name" required>
             </div>
 
             <div class="form-group">
-                <label for="release_date">Date de sortie *</label>
+                <label for="release_date"><?= htmlspecialchars($traductions['release_date']) ?></label>
                 <input type="date" id="release_date" name="release_date" required>
             </div>
 
             <div class="form-group">
-                <label for="min_age">Âge minimum *</label>
+                <label for="min_age"><?= htmlspecialchars($traductions['game_min_age']) ?></label>
                 <input type="number" id="min_age" name="min_age" min="0" max="18" value="0" required>
             </div>
 
             <div class="form-group">
-                <label for="studio_name">Studio * (créé automatiquement s'il n'existe pas)</label>
+                <label for="studio_name"><?= htmlspecialchars($traductions['studio_name']) ?> * (<?= htmlspecialchars($traductions['created_automatically']) ?>)</label>
                 <input type="text" id="studio_name" name="studio_name" list="studios-list" required>
                 <datalist id="studios-list">
                     <?php foreach ($studios as $studio): ?>
@@ -172,29 +172,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="form-group">
-                <label>Modes de jeu</label>
+                <label><?= htmlspecialchars($traductions['game_mode']) ?>(s)</label>
                 <div class="checkbox-group">
                     <div class="checkbox-item">
                         <input type="checkbox" id="has_single_player" name="has_single_player" value="1">
-                        <label for="has_single_player">Solo</label>
+                        <label for="has_single_player"><?= htmlspecialchars($traductions['single_player']) ?></label>
                     </div>
                     <div class="checkbox-item">
                         <input type="checkbox" id="has_multiplayer" name="has_multiplayer" value="1">
-                        <label for="has_multiplayer">Multijoueur</label>
+                        <label for="has_multiplayer"><?= htmlspecialchars($traductions['multiplayer']) ?></label>
                     </div>
                     <div class="checkbox-item">
                         <input type="checkbox" id="has_coop" name="has_coop" value="1">
-                        <label for="has_coop">Coopération</label>
+                        <label for="has_coop"><?= htmlspecialchars($traductions['coop']) ?></label>
                     </div>
                     <div class="checkbox-item">
                         <input type="checkbox" id="has_pvp" name="has_pvp" value="1">
-                        <label for="has_pvp">PvP</label>
+                        <label for="has_pvp"><?= htmlspecialchars($traductions['pvp']) ?></label>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Plateformes * (sélection multiple)</label>
+                <label><?= htmlspecialchars($traductions['platform']) ?> * <?= htmlspecialchars($traductions['selection_multiple']) ?></label>
                 <div class="checkbox-group">
                     <?php foreach ($platforms as $platform): ?>
                         <div class="checkbox-item">
@@ -207,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="form-group">
-                <label>Catégories * (sélection multiple)</label>
+                <label><?= htmlspecialchars($traductions['categories']) ?> * (<?= htmlspecialchars($traductions['selection_multiple']) ?>)</label>
                 <div class="checkbox-group">
                     <?php foreach ($categories as $category): ?>
                         <div class="checkbox-item">
@@ -219,19 +219,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <button type="submit">Ajouter le jeu</button>
+            <button type="submit"><?php echo htmlspecialchars($traductions['add_game']); ?></button>
         </form>
 
         <!-- Liste de jeux -->
-        <h2>Liste des jeux</h2>
+        <h2><?= htmlspecialchars($traductions['list_of_games']) ?></h2>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nom</th>
-                    <th>Studio</th>
-                    <th>Date de sortie</th>
-                    <th>Âge min</th>
+                    <th><?= htmlspecialchars($traductions['game_name']) ?></th>
+                    <th><?= htmlspecialchars($traductions['studio_name']) ?></th>
+                    <th><?= htmlspecialchars($traductions['release_date']) ?></th>
+                    <th><?= htmlspecialchars($traductions['game_min_age']) ?></th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -255,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </tbody>
         </table>
 
-        <p><a href="index.php">Retour à l'accueil</a> | <a href="private.php">Mon compte</a></p>
+        <p><a href="index.php"><?= htmlspecialchars($traductions['return_home']) ?></a> | <a href="private.php"><?= htmlspecialchars($traductions['my_favorites']) ?></a></p>
     </main>
 </body>
 
