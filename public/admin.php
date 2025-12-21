@@ -17,7 +17,6 @@ $traductions = loadTranslation($lang);
 session_start();
 
 //Vérif si l'utilisateur est authentifié
-
 $userId = $_SESSION['user_id'] ?? null;
 
 if (!$userId) {
@@ -35,7 +34,8 @@ if (!$isAdmin) {
     exit();
 }
 
-
+//Récupérer le nom d'utilisateur
+//Avant de gérer la BD sinon erreur (undefined)
 $username = $_SESSION['username'];
 
 //Gestion de la BD
@@ -53,9 +53,8 @@ $password = $config['password'];
 
 $pdo = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $dbUsername, $password);
 
-$gamesManager = new GamesManager();
-
 //Récupérer les listes pour les formulaires
+$gamesManager = new GamesManager();
 
 $platforms = $gamesManager->getAllPlatforms();
 $categories = $gamesManager->getAllCategories();
@@ -87,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Validation basique
         if (empty($name) || empty($releaseDate) || empty($studioName) || empty($platformIds) || empty($categoryIds)) {
-            $errorMessage = "Tous les champs obligatoires doivent être remplis.";
+            $errorMessage = $traductions['tous_champs_requis_doivent_etre_remplis'];
         } else {
             $gameId = $gamesManager->addGameWithEverything(
                 $name,
@@ -103,11 +102,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
 
             if ($gameId) {
-                $successMessage = "Le jeu '$name' a été ajouté avec succès !";
+                $successMessage = $traductions['jeu_ajoute'];
                 // Recharger la liste des jeux
                 $games = $gamesManager->getGamesWithStudio();
+
+                //Trier les jeux par ID croissant pour voir le premier en haut
+                //Aide de l'IA pour comprendre la fonction de tri usort
+                usort($games, fn($a, $b) => $a['game_id'] <=> $b['game_id']); 
             } else {
-                $errorMessage = "Erreur lors de l'ajout du jeu.";
+                $errorMessage = $traductions['erreur_ajoute'];
             }
         }
     }
@@ -117,11 +120,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $gameId = (int)($_POST['game_id'] ?? 0);
 
         if ($gamesManager->removeGameWithEverything($gameId)) {
-            $successMessage = "Jeu supprimé";
+            $successMessage = $traductions['jeu_supprime'];
             // Recharger la liste des jeux
             $games = $gamesManager->getGamesWithStudio();
+            //Trier les jeux par ID croissant pour voir le premier en haut
+            usort($games, fn($a, $b) => $a['game_id'] <=> $b['game_id']);
         } else {
-            $errorMessage = "Erreur lors de la suppression du jeu.";
+            $errorMessage = $traductions['erreur_supprime'];
         }
     }
 }
@@ -169,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="form-group">
                 <label for="min_age"><?= htmlspecialchars($traductions['game_min_age']) ?></label>
-                <input type="number" id="min_age" name="min_age" min="0" max="18" value="0" required>
+                <input type="number" id="min_age" name="min_age" min="1" value="0" required>
             </div>
 
             <div class="form-group">
@@ -186,19 +191,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label><?= htmlspecialchars($traductions['game_mode']) ?>(s)</label>
                 <div class="checkbox-group">
                     <div class="checkbox-item">
-                        <input type="checkbox" id="has_single_player" name="has_single_player" value="1">
+                        <input type="checkbox" id="has_single_player" name="has_single_player">
                         <label for="has_single_player"><?= htmlspecialchars($traductions['single_player']) ?></label>
                     </div>
                     <div class="checkbox-item">
-                        <input type="checkbox" id="has_multiplayer" name="has_multiplayer" value="1">
+                        <input type="checkbox" id="has_multiplayer" name="has_multiplayer>
                         <label for="has_multiplayer"><?= htmlspecialchars($traductions['multiplayer']) ?></label>
                     </div>
                     <div class="checkbox-item">
-                        <input type="checkbox" id="has_coop" name="has_coop" value="1">
+                        <input type="checkbox" id="has_coop" name="has_coop">
                         <label for="has_coop"><?= htmlspecialchars($traductions['coop']) ?></label>
                     </div>
                     <div class="checkbox-item">
-                        <input type="checkbox" id="has_pvp" name="has_pvp" value="1">
+                        <input type="checkbox" id="has_pvp" name="has_pvp">
                         <label for="has_pvp"><?= htmlspecialchars($traductions['pvp']) ?></label>
                     </div>
                 </div>

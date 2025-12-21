@@ -233,6 +233,7 @@ class GamesManager
             return $gameId;
         }catch (Exception $e){
             //Tout annuler en cas d'erreur
+            //Aide de l'IA pour rollback().
             $this->database->getPdo()->rollback();
             error_log("Erreur lors de l'ajout du jeu complet : " . $e->getMessage());
             return null;

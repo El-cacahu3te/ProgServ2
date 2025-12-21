@@ -171,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </br>
 
             <label for="password"><?= htmlspecialchars($traductions['password']) ?></label>
-            <input type="password" id="password" name="password" value="<?= htmlspecialchars($password ?? ''); ?>" required minlength="6">
+            <input type="password" id="password" name="password" required minlength="6">
 
             </br>
             </br>
@@ -183,7 +183,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </br>
 
             <label for="birthdate"><?= htmlspecialchars($traductions['birthdate']) ?></label>
-            <input type="date" id="birthdate" name="birthdate" value="<?= htmlspecialchars($birthdate ?? ''); ?>" required min="0">
+            <input type="date" id="birthdate" name="birthdate" value="<?= htmlspecialchars($birthdate ?? ''); ?>" required>
 
             </br>
             </br>

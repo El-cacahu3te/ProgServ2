@@ -18,12 +18,6 @@ session_start();
 // Vérifie si l'utilisateur est authentifié
 $userId = $_SESSION['user_id'] ?? null;
 
-if (!$userId) {
-    // Redirige vers la page de connexion si l'utilisateur n'est pas authentifié
-    header('Location: login.php');
-    exit();
-}
-
 // Détruit la session
 session_destroy();
 ?>
@@ -34,16 +28,13 @@ session_destroy();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../css/style.css">
-    <title>Déconnexion</title>
+    <title><?= $traductions['logout'] ?></title>
 </head>
 
 <body>
     <main class="container">
-        <h1>Déconnexion réussie</h1>
-
-        <p>Vous avez été déconnecté.e avec succès.</p>
-
-        <p><a href="../index.php">Retour à l'accueil</a> | <a href="login.php">Se connecter à nouveau</a></p>
+        <h1><?= $traductions['logout_success'] ?></h1>
+        <p><a href="../index.php"><?= $traductions['return_home'] ?></a> | <a href="login.php"><?= $traductions['login'] ?></a></p>
     </main>
 </body>
 

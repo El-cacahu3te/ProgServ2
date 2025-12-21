@@ -7,8 +7,7 @@ require_once __DIR__ . '/../src/i18n/load-translation.php';
 
 use Managers\GamesManager;
 
-// GESTION DES COOKIES
-// Constantes
+// Cookies
 const COOKIE_NAME = 'lang';
 const COOKIE_LIFETIME = 120 * 24 * 60 * 60; // 120 jours
 const DEFAULT_LANG = 'fr';
@@ -96,16 +95,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <main class="container">
-        <h1><?= htmlspecialchars($traductions['welcome']) ?></h1>
+        <h2><?= htmlspecialchars($traductions['welcome']) ?></h2>
+        <p><?= htmlspecialchars($traductions['description']) ?></p>
         <?php if (!$userId): ?>
             <form class="login" action="auth/login.php">
                 <button type="submit"><?= htmlspecialchars($traductions['login']) ?></button>
             </form>
+            <br/>
             <form class="create" action="auth/create.php">
                 <button type="submit"><?= htmlspecialchars($traductions['create_account']) ?></button>
             </form>
+            <br/>
         <?php else: ?>
-            <h2><?= htmlspecialchars($traductions['userWelcome']) ?> <a href="private.php"><?= htmlspecialchars($username) ?></a></h2>
+            <h3><?= htmlspecialchars($traductions['userWelcome']) ?> <a href="private.php"><?= htmlspecialchars($username) ?></a></h3>
         <?php endif; ?>
         <form method="post" action="index.php">
             <label for="language"><?= htmlspecialchars($traductions['choose_language']) ?></label>
@@ -116,6 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit"><?= htmlspecialchars($traductions['submit']) ?></button>
         </form>
 
+        <br/>
+        <h2><?= htmlspecialchars($traductions['games_list']) ?></h2>
         <table>
             <thead>
                 <tr>

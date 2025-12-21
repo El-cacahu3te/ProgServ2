@@ -2,6 +2,7 @@
 return [
     'title' => 'Welcome',
     'welcome' => 'Hello and welcome to Gamerat!',
+    'description' => 'Gamerat.ch is a video game website created as part of a server programming course at HEIG-VD. It allows logged-in users to discover games, manage their favorites, and for administrators, to add new ones. Enjoy your stay!',
     'userWelcome' => 'You are connected as: ',
     'guest' => 'Guest',
     'choose_language' => 'Choose your preferred language:',
@@ -35,11 +36,17 @@ return [
     'created_automatically' => 'created automatically if it does not exist',
     'selection_multiple' => 'multiple selection',
     'list_of_games' => 'Liste of games',
+    'tous_champs_requis_doivent_etre_remplis' => 'All required fields must be filled out',
 
     'create_title' => 'Créez votre compte',
     'create_success' => 'Le formulaire a été soumis avec succès !',
     'create_failure' => 'Le formulaire contient des erreurs :',
     'create_pseudo' => 'Pseudonyme',
+
+    'jeu_ajoute' => 'Game added successfully.',
+    'erreur_ajoute' => 'Error adding game.',
+    'jeu_supprime' => 'Game deleted successfully.',
+    'erreur_supprime' => 'Error deleting game.',
 
     'private_page' => 'Private page',
     'private_msg' => 'This page is only accessible to signed on users.',
@@ -50,6 +57,7 @@ return [
 
     'return_home' => 'Go back home',
     'logout' => 'Log out',
+    'logout_success' => 'Logout successful.',
 
     'languages' => [
         'en' => 'English',

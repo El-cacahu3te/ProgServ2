@@ -25,8 +25,14 @@ session_start();
 $userId = $_SESSION['user_id'] ?? null;
 
 // GESTION RECUP ID
+$game_id = $_GET['id'] ?? null;
 
-$game_id = $_GET['id'];
+if (!$game_id) {
+    header('Location: index.php');
+    exit();
+}
+
+$game_id = (int)$game_id;
 
 //GESTION DE LA BASE DE DONNEES
 
@@ -132,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <form method="post" style="display:inline">
                         <input type="hidden" name="action" value="addFavorite">
                         <input type="hidden" name="game_id" value="<?= $gameWithEverything['game_id'] ?>">
-                        <button class="empty" type="submit" class="favorite">🤍</button>
+                        <button class="empty favorite" type="submit">🤍</button>
                     </form>
                 <?php endif; ?>
             <?php endif; ?>
@@ -145,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h3><?= htmlspecialchars($traductions['categories']) ?></h3>
         <ul>
             <?php foreach ($gameWithEverything['categories'] as $category): ?>
-                <li class="details" class="details"><?= htmlspecialchars($category) ?></li>
+                <li class="details"><?= htmlspecialchars($category) ?></li>
             <?php endforeach; ?>
         </ul>
 
